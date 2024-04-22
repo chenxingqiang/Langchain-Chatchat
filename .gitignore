@@ -176,5 +176,3 @@ cython_debug/
 # Test File
 test.py
 configs/*.py
-
-

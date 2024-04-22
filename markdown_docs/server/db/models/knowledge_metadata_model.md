@@ -1,7 +1,9 @@
 ## ClassDef SummaryChunkModel
+
 **SummaryChunkModel**: SummaryChunkModel 类的功能是用于存储和管理文档中每个文档标识符（doc_id）的摘要信息。
 
 **属性**:
+
 - `id`: 唯一标识符，用于标识每个摘要信息的ID。
 - `kb_name`: 知识库名称，表示该摘要信息属于哪个知识库。
 - `summary_context`: 总结文本，存储自动生成或用户输入的文档摘要。
@@ -15,17 +17,22 @@ SummaryChunkModel 类定义了一个用于存储文档摘要信息的数据模�
 在项目中，SummaryChunkModel 被 knowledge_metadata_repository.py 文件中的多个函数调用，包括添加、删除、列出和统计知识库中的摘要信息。这些函数通过操作 SummaryChunkModel 实例来实现对数据库中摘要信息的管理，如添加新的摘要信息、删除特定知识库的摘要信息、根据知识库名称列出摘要信息以及统计特定知识库的摘要数量。
 
 **注意**:
+
 - 在使用 SummaryChunkModel 进行数据库操作时，需要确保传入的参数类型和格式正确，特别是 `meta_data` 字段，它应以正确的JSON格式存储。
 - 在进行矢量库构建和语义关联任务时，应注意 `summary_id` 和 `doc_ids` 字段的正确使用和关联。
 
 **输出示例**:
 假设数据库中有一个摘要信息实例，其可能的表示如下：
+
 ```
 <SummaryChunk(id='1', kb_name='技术文档', summary_context='这是一个关于AI技术的摘要', doc_ids='["doc1", "doc2"]', metadata='{}')>
 ```
+
 这表示一个ID为1的摘要信息，属于“技术文档”知识库，摘要文本为“这是一个关于AI技术的摘要”，关联的文档标识符为doc1和doc2，没有额外的元数据信息。
-### FunctionDef __repr__(self)
-**__repr__**: 此函数的功能是生成并返回一个代表对象状态的字符串。
+
+### FunctionDef **repr**(self)
+
+****repr****: 此函数的功能是生成并返回一个代表对象状态的字符串。
 
 **参数**: 此函数不接受除`self`之外的任何参数。
 
@@ -38,4 +45,5 @@ SummaryChunkModel 类定义了一个用于存储文档摘要信息的数据模�
 ```
 <SummaryChunk(id='123', kb_name='KnowledgeBase1', summary_context='Context1', doc_ids='doc1, doc2', metadata='{'author': 'John Doe'}')>
 ```
+
 ***

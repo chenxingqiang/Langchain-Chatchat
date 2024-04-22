@@ -1,7 +1,9 @@
 ## ClassDef AzureWorker
+
 **AzureWorker**: AzureWorker类是用于与Azure云服务进行交互，特别是用于处理与Azure API相关的聊天和嵌入功能的工作流程。
 
 **属性**:
+
 - `controller_addr`: 控制器地址，用于与模型控制器进行通信。
 - `worker_addr`: 工作器地址，用于标识工作器实例。
 - `model_names`: 模型名称列表，默认为["azure-api"]。
@@ -15,23 +17,29 @@ AzureWorker类继承自ApiModelWorker类，提供了与Azure API交互的具体�
 - `make_conv_template`方法用于创建一个会话模板，该模板定义了用户和助手的角色、系统消息以及消息分隔符等。
 
 **注意**:
+
 - 在使用AzureWorker类时，需要确保已经配置了正确的Azure API密钥和相关参数，以便能够成功调用Azure服务。
 - `do_chat`方法中使用了HTTP流，这要求在处理响应时必须正确管理连接和数据流。
 - 由于`do_chat`方法是异步的，调用该方法时需要注意异步编程模式，确保异步任务的正确管理和调度。
 
 **输出示例**:
 在调用`do_chat`方法时，可能的返回值示例为：
+
 ```json
 {
   "error_code": 0,
   "text": "这是由Azure API生成的回复文本。"
 }
 ```
+
 此示例展示了一个成功的API调用结果，其中`error_code`为0表示成功，`text`字段包含了由Azure API生成的回复文本。
-### FunctionDef __init__(self)
-**__init__**: 初始化AzureWorker对象，并配置其基本属性。
+
+### FunctionDef **init**(self)
+
+****init****: 初始化AzureWorker对象，并配置其基本属性。
 
 **参数**：
+
 - `controller_addr`: 字符串类型，控制器地址，默认为None。
 - `worker_addr`: 字符串类型，工作器地址，默认为None。
 - `model_names`: 字符串列表类型，模型名称，默认为["azure-api"]。
@@ -46,15 +54,20 @@ AzureWorker类继承自ApiModelWorker类，提供了与Azure API交互的具体�
 最后，将传入的`version`参数值赋给对象的`version`属性。这样，每个AzureWorker对象都会有自己的版本信息，用于标识或处理特定版本的模型。
 
 **注意**：
+
 - 在使用AzureWorker对象时，确保提供正确的`controller_addr`和`worker_addr`，这对于确保对象能够正确地与控制器和工作器通信非常重要。
 - `model_names`参数允许自定义模型名称列表，这在处理多个模型时非常有用。默认情况下，它包含一个预设的模型名称"azure-api"。
 - `version`参数用于指定模型的版本，根据需要进行调整。默认值为"gpt-35-turbo"，但根据实际使用的模型版本，这个值可能需要更改。
 - 通过`**kwargs`传递额外的参数时，应确保这些参数与基类的初始化方法兼容，以避免引发错误。
+
 ***
+
 ### FunctionDef do_chat(self, params)
+
 **do_chat**: 此函数的功能是向Azure的OpenAI服务发送聊天请求，并处理返回的聊天结果。
 
 **参数**:
+
 - `params`: `ApiChatParams`类型，包含聊天请求所需的参数，如消息列表、温度参数、最大令牌数等。
 
 **代码描述**:
@@ -65,15 +78,20 @@ AzureWorker类继承自ApiModelWorker类，提供了与Azure API交互的具体�
 此函数与`get_httpx_client`函数关联，后者提供了执行HTTP请求所需的httpx客户端实例。此外，`do_chat`函数依赖于`ApiChatParams`类来获取聊天请求的参数，以及`load_config`方法来加载特定工作器的配置。
 
 **注意**:
+
 - 确保在调用`do_chat`函数之前，已经正确设置了`ApiChatParams`中的参数，包括API密钥、资源名称、部署名称等，这些参数对于成功调用Azure的OpenAI服务至关重要。
 - 函数使用生成器返回聊天结果，调用方需要迭代返回的生成器来获取所有聊天内容。
 - 如果遇到请求错误或服务端错误，函数会将错误信息记录到日志中，调用方应当注意检查日志以便及时发现并处理问题。
 - 函数中使用了`stream=True`选项进行HTTP请求，这意味着响应内容将作为流进行处理，有助于处理大量数据或实时数据。
+
 ***
+
 ### FunctionDef get_embeddings(self, params)
+
 **get_embeddings**: 此函数的功能是打印嵌入信息和参数。
 
 **参数**:
+
 - `params`: 此参数用于接收传入的参数信息。
 
 **代码描述**:
@@ -82,19 +100,25 @@ AzureWorker类继承自ApiModelWorker类，提供了与Azure API交互的具体�
 具体来说，该函数接受一个名为`params`的参数，这个参数可以是任何类型的数据结构，如字典、列表或其他，这取决于调用函数时的具体需求。函数内部没有对`params`进行任何形式的处理或操作，仅仅是将其内容直接打印出来。
 
 **注意**:
+
 - 在实际应用中，`get_embeddings`函数可能需要进一步开发以实现特定的功能，如从Azure服务获取嵌入向量等。
 - 该函数目前的实现主要用于演示或测试目的，因此在生产环境中使用时需要根据实际需求进行相应的修改和扩展。
 - 在调用此函数时，需要确保传入的`params`参数包含了所有必要的信息，以便函数能够正确地执行其预期的打印操作。
+
 ***
+
 ### FunctionDef make_conv_template(self, conv_template, model_path)
+
 **make_conv_template**: 此函数的功能是创建一个对话模板。
 
 **参数**:
+
 - **conv_template**: 字符串类型，指定对话模板，此参数在当前实现中未使用。
 - **model_path**: 字符串类型，指定模型路径，此参数在当前实现中未使用。
 
 **代码描述**:
 `make_conv_template` 函数用于创建一个对话模板实例。它通过调用 `conv.Conversation` 类来实现，生成的对话模板包含以下几个关键属性：
+
 - `name`: 对话的名称，此处使用 `self.model_names[0]` 作为对话名称，即取模型名称列表的第一个元素。
 - `system_message`: 系统消息，这里固定为 "You are a helpful, respectful and honest assistant."，表明助手的角色定位。
 - `messages`: 对话消息列表，初始为空列表。
@@ -103,11 +127,13 @@ AzureWorker类继承自ApiModelWorker类，提供了与Azure API交互的具体�
 - `stop_str`: 对话终止字符串，设定为 "###"。
 
 **注意**:
+
 - 虽然 `conv_template` 和 `model_path` 参数在函数定义中存在，但在当前的实现中并未被使用。这可能是为了未来的功能扩展预留的接口。
 - 函数返回的对话模板实例是基于 `conv.Conversation` 类创建的，确保在使用此函数之前已正确导入或定义了 `conv.Conversation` 类。
 
 **输出示例**:
 假设 `self.model_names[0]` 的值为 "ExampleModel"，则函数的返回值可能如下所示：
+
 ```
 Conversation(
     name="ExampleModel",
@@ -118,5 +144,6 @@ Conversation(
     stop_str="###",
 )
 ```
+
 这个返回值展示了一个初始化状态的对话模板，其中包含了基本的对话属性设置。
 ***

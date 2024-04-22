@@ -19,11 +19,11 @@
 * [介绍](README.md#介绍)
 * [解决的痛点](README.md#解决的痛点)
 * [快速上手](README.md#快速上手)
-    * [1. 环境配置](README.md#1-环境配置)
-    * [2. 模型下载](README.md#2-模型下载)
-    * [3. 初始化知识库和配置文件](README.md#3-初始化知识库和配置文件)
-    * [4. 一键启动](README.md#4-一键启动)
-    * [5. 启动界面示例](README.md#5-启动界面示例)
+  * [1. 环境配置](README.md#1-环境配置)
+  * [2. 模型下载](README.md#2-模型下载)
+  * [3. 初始化知识库和配置文件](README.md#3-初始化知识库和配置文件)
+  * [4. 一键启动](README.md#4-一键启动)
+  * [5. 启动界面示例](README.md#5-启动界面示例)
 * [联系我们](README.md#联系我们)
 
 ## 介绍
@@ -86,7 +86,7 @@ _仅仅是入门教程，能够基础运行__。
 
 ### 1. 环境配置
 
-+ 首先，确保你的机器安装了 Python 3.8 - 3.11 (我们强烈推荐使用 Python3.11)。
+* 首先，确保你的机器安装了 Python 3.8 - 3.11 (我们强烈推荐使用 Python3.11)。
 
 ```
 $ python --version
@@ -126,9 +126,9 @@ $ pip install -r requirements_webui.txt
 ，然后运行
 
 ```Shell
-$ git lfs install
-$ git clone https://huggingface.co/THUDM/chatglm3-6b
-$ git clone https://huggingface.co/BAAI/bge-large-zh
+git lfs install
+git clone https://huggingface.co/THUDM/chatglm3-6b
+git clone https://huggingface.co/BAAI/bge-large-zh
 ```
 
 ### 3. 初始化知识库和配置文件
@@ -136,8 +136,8 @@ $ git clone https://huggingface.co/BAAI/bge-large-zh
 按照下列方式初始化自己的知识库和简单的复制配置文件
 
 ```shell
-$ python copy_config_example.py
-$ python init_database.py --recreate-vs
+python copy_config_example.py
+python init_database.py --recreate-vs
  ```
 
 ### 4. 一键启动
@@ -145,7 +145,7 @@ $ python init_database.py --recreate-vs
 按照以下命令启动项目
 
 ```shell
-$ python startup.py -a
+python startup.py -a
 ```
 
 ### 5. 启动界面示例
@@ -158,11 +158,11 @@ $ python startup.py -a
 
 2. Web UI 启动界面示例：
 
-- Web UI 对话界面：
+* Web UI 对话界面：
 
 ![img](img/LLM_success.png)
 
-- Web UI 知识库管理页面：
+* Web UI 知识库管理页面：
 
 ![](img/init_knowledge_base.jpg)
 
@@ -171,20 +171,19 @@ $ python startup.py -a
 以上方式只是为了快速上手，如果需要更多的功能和自定义启动方式
 ，请参考[Wiki](https://github.com/chatchat-space/Langchain-Chatchat/wiki/)
 
-
 ---
 
 ## 项目里程碑
 
-+ `2023年4月`: `Langchain-ChatGLM 0.1.0` 发布，支持基于 ChatGLM-6B 模型的本地知识库问答。
-+ `2023年8月`: `Langchain-ChatGLM` 改名为 `Langchain-Chatchat`，`0.2.0` 发布，使用 `fastchat` 作为模型加载方案，支持更多的模型和数据库。
-+ `2023年10月`: `Langchain-Chatchat 0.2.5` 发布，推出 Agent 内容，开源项目在`Founder Park & Zhipu AI & Zilliz`
+* `2023年4月`: `Langchain-ChatGLM 0.1.0` 发布，支持基于 ChatGLM-6B 模型的本地知识库问答。
+* `2023年8月`: `Langchain-ChatGLM` 改名为 `Langchain-Chatchat`，`0.2.0` 发布，使用 `fastchat` 作为模型加载方案，支持更多的模型和数据库。
+* `2023年10月`: `Langchain-Chatchat 0.2.5` 发布，推出 Agent 内容，开源项目在`Founder Park & Zhipu AI & Zilliz`
   举办的黑客马拉松获得三等奖。
-+ `2023年12月`: `Langchain-Chatchat` 开源项目获得超过 **20K** stars.
-+ `2024年1月`: `LangChain 0.1.x` 推出，`Langchain-Chatchat 0.2.x` 发布稳定版本`0.2.10`
+* `2023年12月`: `Langchain-Chatchat` 开源项目获得超过 **20K** stars.
+* `2024年1月`: `LangChain 0.1.x` 推出，`Langchain-Chatchat 0.2.x` 发布稳定版本`0.2.10`
   后将停止更新和技术支持，全力研发具有更强应用性的 `Langchain-Chatchat 0.3.x`。
 
-+ 🔥 让我们一起期待未来 Chatchat 的故事 ···
+* 🔥 让我们一起期待未来 Chatchat 的故事 ···
 
 ---
 
@@ -195,6 +194,7 @@ $ python startup.py -a
 [![Telegram](https://img.shields.io/badge/Telegram-2CA5E0?style=for-the-badge&logo=telegram&logoColor=white "langchain-chatglm")](https://t.me/+RjliQ3jnJ1YyN2E9)
 
 ### 项目交流群
+
 <img src="img/qr_code_104.jpg" alt="二维码" width="300" />
 
 🎉 Langchain-Chatchat 项目微信交流群，如果你也对本项目感兴趣，欢迎加入群聊参与讨论交流。

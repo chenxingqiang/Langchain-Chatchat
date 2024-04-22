@@ -11,6 +11,7 @@ assignees: ''
 用简洁明了的语言描述这个问题 / Describe the problem in a clear and concise manner.
 
 **复现问题的步骤 / Steps to Reproduce**
+
 1. 执行 '...' / Run '...'
 2. 点击 '...' / Click '...'
 3. 滚动到 '...' / Scroll to '...'
@@ -23,6 +24,7 @@ assignees: ''
 描述实际发生的结果 / Describe the actual result.
 
 **环境信息 / Environment Information**
+
 - langchain-ChatGLM 版本/commit 号：(例如：v2.0.1 或 commit 123456) / langchain-ChatGLM version/commit number: (e.g., v2.0.1 or commit 123456)
 - 是否使用 Docker 部署（是/否）：是 / Is Docker deployment used (yes/no): yes
 - 使用的模型（ChatGLM2-6B / Qwen-7B 等）：ChatGLM-6B / Model used (ChatGLM2-6B / Qwen-7B, etc.): ChatGLM2-6B

@@ -1,7 +1,9 @@
 ## ClassDef LangchainReranker
+
 **LangchainReranker**: LangchainReranker的功能是使用`Cohere Rerank API`对文档进行压缩排序。
 
 **属性**:
+
 - `model_name_or_path`: 模型名称或路径。
 - `_model`: 私有属性，存储加载的模型实例。
 - `top_n`: 返回的顶部文档数量。
@@ -16,12 +18,14 @@ LangchainReranker类继承自BaseDocumentCompressor，主要用于利用Cohere�
 在项目中，LangchainReranker被用于`knowledge_base_chat.py`中的`knowledge_base_chat_iterator`函数。在这个场景下，LangchainReranker用于对从知识库中检索到的文档进行重排序，以提高返回给用户的文档的相关性。通过将查询字符串和每个文档内容作为输入对，LangchainReranker能够评估每个文档与查询的相关性，并根据这些评分对文档进行排序。
 
 **注意**:
+
 - 在使用LangchainReranker时，需要确保提供的模型路径是有效的，并且模型兼容Cohere的rerank API。
 - `device`参数应根据运行环境选择合适的值，以确保模型能够在指定的设备上运行。
 - 在处理大量文档时，合理设置`batch_size`和`num_workers`可以提高处理速度。
 
 **输出示例**:
 调用`compress_documents`方法后，可能返回的结果示例为：
+
 ```python
 [
     Document(page_content="文档内容1", metadata={"relevance_score": 0.95}),
@@ -29,11 +33,15 @@ LangchainReranker类继承自BaseDocumentCompressor，主要用于利用Cohere�
     Document(page_content="文档内容3", metadata={"relevance_score": 0.85})
 ]
 ```
+
 这个返回值是一个文档对象的列表，每个文档对象包含了原始的页面内容和一个名为`relevance_score`的元数据，表示该文档与查询的相关性评分。
-### FunctionDef __init__(self, model_name_or_path, top_n, device, max_length, batch_size, num_workers)
-**__init__**: 此函数的功能是初始化LangchainReranker类的实例。
+
+### FunctionDef **init**(self, model_name_or_path, top_n, device, max_length, batch_size, num_workers)
+
+****init****: 此函数的功能是初始化LangchainReranker类的实例。
 
 **参数**:
+
 - **model_name_or_path**: 指定模型的名称或路径，类型为字符串。
 - **top_n**: 返回的最高排名结果数量，默认值为3，类型为整数。
 - **device**: 指定运行模型的设备，可以是"cuda"或"cpu"，默认为"cuda"。
@@ -49,15 +57,20 @@ LangchainReranker类继承自BaseDocumentCompressor，主要用于利用Cohere�
 需要注意的是，代码中有几个参数（如`show_progress_bar`、`activation_fct`、`apply_softmax`）被注释掉了，这意味着它们在当前版本的实现中不被使用。此外，虽然`max_length`作为一个参数被传递给了父类的初始化函数，但在创建CrossEncoder实例时，它被直接设置为1024，而不是使用传入的参数值。
 
 **注意**:
+
 - 在使用此类时，需要确保`model_name_or_path`指向的模型与任务相匹配，且能够被CrossEncoder正确加载。
 - 虽然默认设备被设置为"cuda"，在没有GPU支持的环境下应将其更改为"cpu"。
 - `num_workers`的默认值为0，这意味着数据加载操作将在主线程中执行。根据具体的运行环境和需求，可能需要调整此参数以优化性能。
 - 注释掉的参数可能在未来版本中被启用或彻底移除，开发者在使用此类时应留意代码库的更新。
+
 ***
+
 ### FunctionDef compress_documents(self, documents, query, callbacks)
+
 **compress_documents**: 此函数的功能是使用Cohere的rerank API压缩文档序列。
 
 **参数**:
+
 - documents: 需要压缩的文档序列。
 - query: 用于压缩文档的查询字符串。
 - callbacks: 压缩过程中运行的回调函数，可选参数。
@@ -68,15 +81,18 @@ LangchainReranker类继承自BaseDocumentCompressor，主要用于利用Cohere�
 在项目中，`compress_documents`函数被`knowledge_base_chat_iterator`函数调用，用于在知识库聊天场景中对检索到的文档进行重排序，以提高返回给用户的文档的相关性。通过使用Cohere的rerank API，`compress_documents`函数能够根据与用户查询最相关的内容来优化文档的排序，从而提高用户体验。
 
 **注意**:
+
 - 确保传入的文档序列不为空，以避免无效的API调用。
 - 该函数依赖于外部模型进行文档压缩，因此需要确保模型正确配置并可用。
 
 **输出示例**:
+
 ```python
 [
     Document(page_content="文档内容1", metadata={"relevance_score": 0.95}),
     Document(page_content="文档内容2", metadata={"relevance_score": 0.90})
 ]
 ```
+
 此示例展示了一个包含两个文档的序列，每个文档都附带了一个通过模型预测得到的相关性得分。
 ***

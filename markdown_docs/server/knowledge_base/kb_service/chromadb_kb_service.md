@@ -1,7 +1,9 @@
 ## FunctionDef _get_result_to_documents(get_result)
+
 **_get_result_to_documents**: 该函数的功能是将`GetResult`类型的查询结果转换为`Document`对象列表。
 
 **参数**:
+
 - `get_result`: `GetResult`类型，表示从数据库查询得到的结果。
 
 **代码描述**:
@@ -16,21 +18,27 @@
 在项目中，`_get_result_to_documents`函数被`ChromaKBService`类的`get_doc_by_ids`方法调用。`get_doc_by_ids`方法负责根据给定的ID列表从数据库中查询文档，并使用`_get_result_to_documents`函数将查询结果转换为`Document`对象列表，以便进一步处理或响应客户端请求。
 
 **注意**:
+
 - 确保传入的`get_result`参数格式正确，特别是`documents`和`metadatas`字段，以避免运行时错误。
 - 该函数不直接与数据库交互，而是处理已经查询得到的结果。
 
 **输出示例**:
+
 ```python
 [
     Document(page_content="文档内容1", metadata={"作者": "张三"}),
     Document(page_content="文档内容2", metadata={"作者": "李四"})
 ]
 ```
+
 此示例展示了当`_get_result_to_documents`函数处理包含两个文档内容和对应元数据的查询结果时，返回的`Document`对象列表的可能形态。
+
 ## FunctionDef _results_to_docs_and_scores(results)
+
 **_results_to_docs_and_scores**: 该函数的功能是将搜索结果转换为文档和分数的列表。
 
 **参数**:
+
 - `results`: 任意类型，预期为包含文档内容、元数据和距离的搜索结果。
 
 **代码描述**:
@@ -41,21 +49,27 @@
 在项目中，`_results_to_docs_and_scores` 函数被 `ChromaKBService` 类的 `do_search` 方法调用。`do_search` 方法负责执行搜索查询，并使用 `_results_to_docs_and_scores` 函数处理查询结果，将其转换为更易于处理和展示的格式。这种设计模式允许将搜索逻辑与结果处理逻辑分离，提高了代码的可读性和可维护性。
 
 **注意**:
+
 - 确保传入的 `results` 参数格式正确，即包含 `"documents"`、`"metadatas"` 和 `"distances"` 三个键，且每个键对应的值都是列表格式。
 - 该函数依赖于 `Document` 类的正确实现。`Document` 类需要能够接受页面内容和元数据作为参数，并将它们封装为一个对象。
 
 **输出示例**:
+
 ```python
 [
     (Document(page_content="文档内容1", metadata={"作者": "张三"}), 0.95),
     (Document(page_content="文档内容2", metadata={"作者": "李四"}), 0.89)
 ]
 ```
+
 此输出示例展示了函数返回值的可能形式，其中包含了两个元组，每个元组都包含一个 `Document` 对象和一个表示与查询相似度的分数。
+
 ## ClassDef ChromaKBService
+
 **ChromaKBService**: ChromaKBService 类是用于操作和管理基于 ChromaDB 的知识库服务。
 
 **属性**:
+
 - `vs_path`: 向量存储路径。
 - `kb_path`: 知识库路径。
 - `client`: ChromaDB 客户端实例。
@@ -76,11 +90,13 @@ ChromaKBService 类继承自 KBService 类，专门用于处理基于 ChromaDB �
 - `do_delete_doc` 方法根据提供的知识文件删除文档。
 
 **注意**:
+
 - 在使用 ChromaKBService 之前，需要确保 ChromaDB 环境已经正确设置并可用。
 - 在调用 `do_add_doc` 方法添加文档时，需要确保文档数据包含有效的文本、嵌入向量和元数据。
 - 删除操作（`do_drop_kb`、`del_doc_by_ids`、`do_delete_doc`）应谨慎使用，以避免意外丢失数据。
 
 **输出示例**:
+
 ```python
 # 搜索文档的示例输出
 [
@@ -88,8 +104,11 @@ ChromaKBService 类继承自 KBService 类，专门用于处理基于 ChromaDB �
     (Document(text="另一个文档内容示例", metadata={"author": "另一个作者示例"}), 0.90)
 ]
 ```
+
 这个示例展示了执行文档搜索操作后，可能返回的文档列表和它们的相关性得分。每个元组包含一个 Document 实例和一个得分，Document 实例包含文档的文本和元数据。
+
 ### FunctionDef vs_type(self)
+
 **vs_type**: vs_type函数的功能是返回当前知识库服务支持的向量存储类型。
 
 **参数**: 该函数没有参数。
@@ -97,17 +116,22 @@ ChromaKBService 类继承自 KBService 类，专门用于处理基于 ChromaDB �
 **代码描述**: vs_type函数是ChromaKBService类的一个方法，它的作用是指明该知识库服务实例支持的向量存储类型。在这个具体实现中，vs_type方法通过返回SupportedVSType枚举类中的CHROMADB值，明确表示ChromaKBService支持ChromaDB作为其向量存储服务。SupportedVSType枚举类定义了一系列项目中支持的向量存储类型，包括但不限于FAISS、MILVUS、ZILLIZ、PostgreSQL、Elasticsearch等，其中CHROMADB代表使用ChromaDB作为向量存储服务。这种设计允许知识库服务在项目中以一种灵活的方式来指定和使用不同的向量存储解决方案，同时也便于在KBServiceFactory中根据需要动态选择和实例化相应的知识库服务实现。
 
 **注意**:
+
 - 在使用vs_type方法时，开发者不需要传递任何参数，该方法将自动返回ChromaKBService所支持的向量存储类型。
 - 返回的向量存储类型应与SupportedVSType枚举类中定义的类型一致，以确保知识库服务的正确实例化和使用。
 - 当扩展项目以支持新的向量存储服务时，应在SupportedVSType枚举类中添加新的类型，并确保知识库服务类正确实现vs_type方法以反映这一变化。
 
-**输出示例**: 
+**输出示例**:
+
 ```python
 'chromadb'
 ```
+
 在这个示例中，vs_type方法将返回一个字符串'chromadb'，表示ChromaKBService类支持使用ChromaDB作为其向量存储服务。
 ***
+
 ### FunctionDef get_vs_path(self)
+
 **get_vs_path**: 此函数的功能是获取向量空间的路径。
 
 **参数**: 此函数没有显式参数，但依赖于对象的`kb_name`和`embed_model`属性。
@@ -120,7 +144,9 @@ ChromaKBService 类继承自 KBService 类，专门用于处理基于 ChromaDB �
 
 **输出示例**: 假设知识库名称为`example_kb`，嵌入模型为`model_v1`，则`get_vs_path`可能返回的路径示例为`/path/to/vector_space/example_kb_model_v1.vs`。
 ***
+
 ### FunctionDef get_kb_path(self)
+
 **get_kb_path**: 此函数的功能是获取知识库的路径。
 
 **参数**: 此函数没有参数。
@@ -132,11 +158,15 @@ ChromaKBService 类继承自 KBService 类，专门用于处理基于 ChromaDB �
 **注意**: 在使用 `get_kb_path` 方法时，需要确保 `self.kb_name` 已经被正确赋值，因为这将直接影响到获取路径的结果。
 
 **输出示例**: 假设当前知识库的名称为 "example_kb"，那么 `get_kb_path` 方法的返回值可能看起来像这样：
+
 ```
 "/path/to/knowledge_bases/example_kb"
 ```
+
 ***
+
 ### FunctionDef do_init(self)
+
 **do_init**: 此函数的功能是初始化ChromaKBService对象。
 
 **参数**: 此函数没有参数。
@@ -147,7 +177,9 @@ ChromaKBService 类继承自 KBService 类，专门用于处理基于 ChromaDB �
 
 **注意**: 在调用`do_init`方法之前，需要确保`ChromaKBService`对象的`kb_name`和`embed_model`属性已经被正确设置，因为这些属性会影响到`get_vs_path`方法的执行结果，进而影响到整个知识库服务的初始化过程。此外，`do_init`方法的成功执行是后续所有知识库操作能够正常进行的前提，因此在知识库服务的启动流程中，这个方法的调用是不可或缺的一步。
 ***
+
 ### FunctionDef do_create_kb(self)
+
 **do_create_kb**: 此函数的功能是在ChromaDB中创建一个知识库（KB）。
 
 **参数**: 此函数不接受任何外部参数。
@@ -156,7 +188,9 @@ ChromaKBService 类继承自 KBService 类，专门用于处理基于 ChromaDB �
 
 **注意**: 使用`do_create_kb`方法时，需要确保`self.client`已经正确初始化并且可以连接到ChromaDB服务器。此外，`self.kb_name`应该是一个有效的集合名称，遵循ChromaDB对集合名称的任何限制或规则。在调用此方法之前，最好确认这些条件已经满足，以避免运行时错误。
 ***
+
 ### FunctionDef do_drop_kb(self)
+
 **do_drop_kb**: 此函数的功能是删除ChromaDB中的一个集合。
 
 **参数**: 此函数没有参数。
@@ -167,10 +201,13 @@ ChromaKBService 类继承自 KBService 类，专门用于处理基于 ChromaDB �
 
 **注意**: 在使用`do_drop_kb`函数时，需要确保`self.kb_name`已经正确设置为目标集合的名称，并且调用者应当准备好处理可能抛出的`ValueError`异常，特别是在集合可能不存在的情况下。此外，考虑到删除集合是一个不可逆的操作，应当谨慎使用此函数，确保其调用是在适当的上下文中，并且符合业务逻辑的需求。
 ***
+
 ### FunctionDef do_search(self, query, top_k, score_threshold)
+
 **do_search**: 该函数的功能是执行文本查询，并返回与查询最相关的文档及其相关性分数。
 
 **参数**:
+
 - `query`: 需要进行搜索的查询文本，数据类型为字符串。
 - `top_k`: 返回的最相关文档的数量，数据类型为整数。
 - `score_threshold`: 相关性分数的阈值，默认为SCORE_THRESHOLD，只有分数高于此阈值的文档才会被返回，数据类型为浮点数。
@@ -185,23 +222,29 @@ ChromaKBService 类继承自 KBService 类，专门用于处理基于 ChromaDB �
 在整个过程中，`do_search`函数通过与`EmbeddingsFunAdapter`和`_results_to_docs_and_scores`等函数的交互，实现了从文本查询到获取相关文档及其分数的完整流程。
 
 **注意**:
+
 - 确保`query`参数是有效的查询文本，且`top_k`参数正确设置以返回期望数量的结果。
 - 函数的性能和准确性依赖于嵌入模型的质量和查询处理机制，因此选择合适的嵌入模型和调整查询参数对于获得有用的搜索结果至关重要。
 - 默认的`score_threshold`是SCORE_THRESHOLD，可以根据需要调整以过滤掉低相关性的结果。
 
 **输出示例**:
+
 ```python
 [
     (Document(page_content="文档内容1", metadata={"作者": "张三"}), 0.95),
     (Document(page_content="文档内容2", metadata={"作者": "李四"}), 0.89)
 ]
 ```
+
 此输出示例展示了函数返回值的可能形式，其中包含了两个元组，每个元组都包含一个`Document`对象和一个表示与查询相似度的分数。这样的输出格式便于后续处理和展示搜索结果。
 ***
+
 ### FunctionDef do_add_doc(self, docs)
+
 **do_add_doc**: 该函数的功能是将文档列表添加到数据库中，并返回包含文档ID和元数据的信息列表。
 
 **参数**:
+
 - `docs`: 需要添加到数据库的文档对象列表，类型为`List[Document]`。
 - `**kwargs`: 接受可变数量的关键字参数，用于扩展或自定义功能。
 
@@ -213,24 +256,30 @@ ChromaKBService 类继承自 KBService 类，专门用于处理基于 ChromaDB �
 最后，函数返回`doc_infos`列表，其中包含了每个添加到数据库中的文档的ID和元数据信息，为后续的文档管理和检索提供了便利。
 
 **注意**:
+
 - 确保传入的`docs`参数是有效的文档对象列表，且每个文档对象都应包含必要的内容和元数据。
 - `_docs_to_embeddings`方法依赖于特定的文档向量化模型，因此在使用`do_add_doc`函数之前，应确保相关的向量化模型已经被正确设置和初始化。
 - 生成的文档ID是基于时间戳的UUID，保证了每个文档的唯一性。
 
 **输出示例**:
 调用`do_add_doc(docs=[Document1, Document2])`可能会返回如下列表：
+
 ```python
 [
     {"id": "文档1的UUID", "metadata": {"title": "文档1标题"}},
     {"id": "文档2的UUID", "metadata": {"title": "文档2标题"}}
 ]
 ```
+
 这个列表包含了每个添加到数据库中的文档的唯一ID和元数据信息，便于后续的文档管理和检索操作。
 ***
+
 ### FunctionDef get_doc_by_ids(self, ids)
+
 **get_doc_by_ids**: 该函数的功能是根据一组ID从数据库中查询并返回对应的文档对象列表。
 
 **参数**:
+
 - `ids`: `List[str]`类型，表示需要查询的文档ID列表。
 
 **代码描述**:
@@ -241,39 +290,50 @@ ChromaKBService 类继承自 KBService 类，专门用于处理基于 ChromaDB �
 通过这种方式，`get_doc_by_ids`方法能够提供一个高效且方便的接口，用于根据文档ID查询并获取文档内容及其元数据，进而支持后续的文档处理或响应客户端请求。
 
 **注意**:
+
 - 传入的ID列表应确保有效，以避免查询不到文档或产生异常。
 - 该方法依赖于`_get_result_to_documents`函数正确处理查询结果，因此需要保证`GetResult`类型的数据结构与预期匹配。
 
 **输出示例**:
+
 ```python
 [
     Document(page_content="文档内容1", metadata={"作者": "张三"}),
     Document(page_content="文档内容2", metadata={"作者": "李四"})
 ]
 ```
+
 此示例展示了当根据给定的ID列表查询数据库并处理结果时，`get_doc_by_ids`方法可能返回的`Document`对象列表的形态。每个`Document`对象包含了文档的内容(`page_content`)和元数据(`metadata`)。
 ***
+
 ### FunctionDef del_doc_by_ids(self, ids)
+
 **del_doc_by_ids**: 此函数的功能是根据提供的ID列表删除数据库中的文档。
 
 **参数**:
+
 - ids: 一个字符串列表，包含要删除的文档的ID。
 
 **代码描述**:
 `del_doc_by_ids`函数接受一个参数`ids`，这是一个字符串列表，每个字符串代表一个需要从数据库中删除的文档的ID。函数内部调用`self.collection.delete`方法，将`ids`作为参数传递给该方法，以便删除对应的文档。完成删除操作后，函数返回`True`，表示文档已成功删除。
 
 **注意**:
+
 - 确保传递给`del_doc_by_ids`函数的`ids`列表中的每个ID都是有效且存在于数据库中的，否则可能会导致删除操作失败或不完全。
 - 此函数总是返回`True`，即使某些ID可能因为不存在而没有被实际删除。因此，调用者可能需要额外的逻辑来验证删除操作的实际效果。
 
 **输出示例**:
 由于此函数返回的是一个布尔值，因此调用`del_doc_by_ids(['123', '456'])`后，预期的返回值为：
+
 ```
 True
 ```
+
 这表示指定的文档已被成功删除。
 ***
+
 ### FunctionDef do_clear_vs(self)
+
 **do_clear_vs**: 此函数的功能是清空向量存储。
 
 **参数**: 此函数没有参数。
@@ -282,10 +342,13 @@ True
 
 **注意**: 在使用`do_clear_vs`函数时，需要确保`self.kb_name`已经正确设置为目标集合的名称。此外，考虑到删除集合是一个不可逆的操作，应当谨慎使用此函数，确保其调用是在适当的上下文中，并且符合业务逻辑的需求。由于`do_clear_vs`函数的实现依赖于`do_drop_kb`，因此在使用`do_clear_vs`时也应当准备好处理可能由`do_drop_kb`抛出的`ValueError`异常，特别是在集合可能不存在的情况下。
 ***
+
 ### FunctionDef do_delete_doc(self, kb_file)
+
 **do_delete_doc**: 此函数用于删除知识库中的指定文件。
 
 **参数**:
+
 - `kb_file`: KnowledgeFile对象，代表要删除的知识库文件。
 - `**kwargs`: 接收额外的关键字参数，可用于扩展功能或传递额外信息。
 
@@ -297,6 +360,7 @@ True
 此方法的实现依赖于`collection`对象的`delete`方法，该方法是对数据库操作的抽象，允许通过指定条件来删除记录。在本项目中，`collection`很可能代表了一个封装了数据库操作的类实例，用于管理知识库中的数据记录。
 
 **注意**:
+
 - 在调用`do_delete_doc`方法时，需要确保传入的`kb_file`对象有效，并且其`filepath`属性正确指向了要删除的文件路径。
 - 该方法的执行结果依赖于`collection.delete`方法的实现，因此在不同的数据库或数据存储方案中，其具体行为可能会有所不同。
 - 删除操作是不可逆的，因此在执行前应确保文件确实不再需要，以避免数据丢失。

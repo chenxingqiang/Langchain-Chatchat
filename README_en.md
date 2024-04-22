@@ -12,7 +12,6 @@ LLM API.
 and strive to develop `Langchain-Chachat 0.3.x` with stronger applicability.
 Subsequent bug fixes for `0.2.10` will be pushed directly to the `master` branch without version updates.
 
-
 ---
 
 ## Table of Contents
@@ -20,11 +19,11 @@ Subsequent bug fixes for `0.2.10` will be pushed directly to the `master` branch
 - [Introduction](README.md#Introduction)
 - [Pain Points Addressed](README.md#Pain-Points-Addressed)
 - [Quick Start](README.md#Quick-Start)
-    - [1. Environment Setup](README.md#1-Environment-Setup)
-    - [2. Model Download](README.md#2-Model-Download)
-    - [3. Initialize Knowledge Base and Configuration Files](README.md#3-Initialize-Knowledge-Base-and-Configuration-Files)
-    - [4. One-Click Startup](README.md#4-One-Click-Startup)
-    - [5. Startup Interface Examples](README.md#5-Startup-Interface-Examples)
+  - [1. Environment Setup](README.md#1-Environment-Setup)
+  - [2. Model Download](README.md#2-Model-Download)
+  - [3. Initialize Knowledge Base and Configuration Files](README.md#3-Initialize-Knowledge-Base-and-Configuration-Files)
+  - [4. One-Click Startup](README.md#4-One-Click-Startup)
+  - [5. Startup Interface Examples](README.md#5-Startup-Interface-Examples)
 - [Contact Us](README.md#Contact-Us)
 
 ## Introduction
@@ -48,7 +47,7 @@ to expand the access to various models and remote APIs in the future.
 
 ⛓️ The implementation principle of this project is shown in the graph below. The main process includes: loading files ->
 reading text -> text segmentation -> text vectorization -> question vectorization -> matching the `top-k` most similar
-to the question vector in the text vector -> The matched text is added to `prompt `as context and question -> submitte
+to the question vector in the text vector -> The matched text is added to `prompt`as context and question -> submitte
 to `LLM` to generate an answer.
 
 📺[video introduction](https://www.bilibili.com/video/BV13M4y1e7cN/?share_source=copy_web&vd_source=e6c5aafe684f30fbe41925d61ca6d514)
@@ -129,9 +128,9 @@ install [Git LFS](https://docs.github.com/zh/repositories/working-with-files/man
 and then run:
 
 ```Shell
-$ git lfs install
-$ git clone https://huggingface.co/THUDM/chatglm2-6b
-$ git clone https://huggingface.co/moka-ai/m3e-base
+git lfs install
+git clone https://huggingface.co/THUDM/chatglm2-6b
+git clone https://huggingface.co/moka-ai/m3e-base
 ```
 
 ### Initializing the Knowledge Base and Config File
@@ -139,8 +138,8 @@ $ git clone https://huggingface.co/moka-ai/m3e-base
 Follow the steps below to initialize your own knowledge base and config file:
 
 ```shell
-$ python copy_config_example.py
-$ python init_database.py --recreate-vs
+python copy_config_example.py
+python init_database.py --recreate-vs
  ```
 
 ### One-Click Launch
@@ -148,7 +147,7 @@ $ python init_database.py --recreate-vs
 To start the project, run the following command:
 
 ```shell
-$ python startup.py -a
+python startup.py -a
 ```
 
 ### Example of Launch Interface
@@ -176,19 +175,18 @@ please refer to the [Wiki](https://github.com/chatchat-space/Langchain-Chatchat/
 
 ## Project Milestones
 
-+ `April 2023`: `Langchain-ChatGLM 0.1.0` released, supporting local knowledge base question and answer based on the
+- `April 2023`: `Langchain-ChatGLM 0.1.0` released, supporting local knowledge base question and answer based on the
   ChatGLM-6B model.
-+ `August 2023`: `Langchain-ChatGLM` was renamed to `Langchain-Chatchat`, `0.2.0` was released, using `fastchat` as the
+- `August 2023`: `Langchain-ChatGLM` was renamed to `Langchain-Chatchat`, `0.2.0` was released, using `fastchat` as the
   model loading solution, supporting more models and databases.
-+ `October 2023`: `Langchain-Chachat 0.2.5` was released, Agent content was launched, and the open source project won
+- `October 2023`: `Langchain-Chachat 0.2.5` was released, Agent content was launched, and the open source project won
   the third prize in the hackathon held by `Founder Park & Zhipu AI & Zilliz`.
-+ `December 2023`: `Langchain-Chachat` open source project received more than **20K** stars.
-+ `January 2024`: `LangChain 0.1.x` is launched, `Langchain-Chachat 0.2.x` is released. After the stable
+- `December 2023`: `Langchain-Chachat` open source project received more than **20K** stars.
+- `January 2024`: `LangChain 0.1.x` is launched, `Langchain-Chachat 0.2.x` is released. After the stable
   version `0.2.10` is released, updates and technical support will be stopped, and all efforts will be made to
   develop `Langchain with stronger applicability -Chat 0.3.x`.
 
-
-+ 🔥 Let’s look forward to the future Chatchat stories together···
+- 🔥 Let’s look forward to the future Chatchat stories together···
 
 ---
 

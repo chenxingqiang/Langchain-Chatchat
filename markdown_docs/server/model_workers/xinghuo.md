@@ -1,7 +1,9 @@
 ## FunctionDef request(appid, api_key, api_secret, Spark_url, domain, question, temperature, max_token)
+
 **request**: 此函数用于通过WebSocket连接发送请求到Spark服务，并异步接收处理结果。
 
 **参数**:
+
 - **appid**: 应用程序的唯一标识符。
 - **api_key**: 用于访问Spark服务的API密钥。
 - **api_secret**: 用于访问Spark服务的API密钥的秘密。
@@ -15,15 +17,19 @@
 函数首先使用`SparkApi.Ws_Param`类创建一个`wsParam`对象，并通过该对象的`create_url`方法生成用于WebSocket连接的URL。然后，使用`SparkApi.gen_params`函数生成请求数据，该数据包括应用ID、领域、问题、温度和最大令牌数等信息。接下来，函数通过`websockets.connect`建立与Spark服务的WebSocket连接，并使用`json.dumps`将请求数据转换为JSON格式后发送。函数接着进入一个循环，异步接收来自Spark服务的响应。如果响应的头部信息中状态为2，表示处理完成，循环结束。如果响应的有效载荷中包含文本信息，则将该信息的内容生成器返回。
 
 **注意**:
+
 - 在使用此函数时，需要确保传入的`appid`、`api_key`、`api_secret`和`Spark_url`等参数正确无误，因为这些参数直接影响到能否成功建立WebSocket连接和发送请求。
 - 函数采用异步编程模式，调用时需要在异步环境下使用`await`关键字。
 - 由于函数使用了生成器`yield`来返回文本内容，调用此函数时需要使用异步迭代器或在异步循环中处理返回的文本内容。
 - 函数中的`temperature`参数控制生成文本的创造性，较高的值会导致更多样化的回答，而较低的值则使回答更加确定性。根据实际需求调整此参数。
 - `max_token`参数限制了生成回答的长度，需要根据实际需求调整。
+
 ## ClassDef XingHuoWorker
+
 **XingHuoWorker**: XingHuoWorker类是用于处理与“星火”API模型交互的工作器。
 
 **属性**:
+
 - `model_names`: 模型名称列表，默认为["xinghuo-api"]。
 - `controller_addr`: 控制器地址，用于与模型控制器进行通信。
 - `worker_addr`: 工作器地址，标识当前工作器的网络位置。
@@ -40,22 +46,28 @@ XingHuoWorker类继承自ApiModelWorker类，专门用于与“星火”API进�
 `make_conv_template`方法用于生成对话模板，这个模板定义了对话的基本结构，包括参与者角色、消息分隔符等。
 
 **注意**:
+
 - 使用XingHuoWorker类时，需要确保正确设置了模型名称、控制器地址和工作器地址，这些参数对于确保工作器能够正确与“星火”API进行交互至关重要。
 - 版本参数`version`对于选择正确的API接口非常关键，需要根据“星火”API的版本更新情况进行调整。
 - 由于`do_chat`方法涉及异步编程，使用时需要注意异步环境的配置和管理。
 
 **输出示例**:
+
 ```json
 {
   "error_code": 0,
   "text": "这是由模型生成的回复文本。"
 }
 ```
+
 此示例展示了`do_chat`方法成功调用“星火”API并接收到模型生成的回复文本后的可能输出。`error_code`为0表示调用成功，`text`字段包含了模型生成的文本。
-### FunctionDef __init__(self)
-**__init__**: 该函数用于初始化XingHuoWorker对象。
+
+### FunctionDef **init**(self)
+
+****init****: 该函数用于初始化XingHuoWorker对象。
 
 **参数**:
+
 - **model_names**: 一个字符串列表，默认值为["xinghuo-api"]。这个列表包含了模型的名称。
 - **controller_addr**: 一个字符串，表示控制器的地址。默认值为None。
 - **worker_addr**: 一个字符串，表示工作节点的地址。默认值为None。
@@ -72,14 +84,19 @@ XingHuoWorker类继承自ApiModelWorker类，专门用于与“星火”API进�
 最后，将`version`参数赋值给`self.version`属性，存储版本号信息。
 
 **注意**:
+
 - 在使用`XingHuoWorker`类创建对象时，需要注意`model_names`、`controller_addr`、`worker_addr`和`version`参数的正确设置，这些参数对于对象的配置和后续操作非常重要。
 - `kwargs`参数提供了一种灵活的方式来传递额外的配置选项，但使用时需要确保传递的关键字参数是有效且被支持的。
 - 默认的`context_len`值为8000，但可以通过在`kwargs`中传递`context_len`参数来自定义这个值。
+
 ***
+
 ### FunctionDef do_chat(self, params)
+
 **do_chat**: 此函数用于执行聊天操作，通过与Spark服务的WebSocket接口交互，发送聊天请求并接收回答。
 
 **参数**:
+
 - `params`: `ApiChatParams`类型，包含聊天请求所需的所有参数。
 
 **代码描述**:
@@ -96,51 +113,67 @@ XingHuoWorker类继承自ApiModelWorker类，专门用于与“星火”API进�
 当`iter_over_async`函数返回数据块时，`do_chat`函数将这些数据块累加到`text`字符串中，并以字典形式生成器返回，其中包含错误码（`error_code`）和累加后的文本（`text`）。
 
 **注意**:
+
 - 确保在调用`do_chat`函数之前，已正确设置`ApiChatParams`中的所有必要参数，包括消息内容、版本等。
 - `do_chat`函数依赖于正确配置的事件循环来处理异步操作，因此在调用此函数时应注意事件循环的管理。
 - 由于`do_chat`函数使用了生成器`yield`来逐步返回处理结果，调用此函数时需要适当地处理生成器返回的数据。
 
 **输出示例**:
 调用`do_chat`函数可能返回的示例输出为：
+
 ```python
 {"error_code": 0, "text": "你好，很高兴为你服务。"}
 ```
+
 此输出表示聊天请求成功处理，且服务端返回了回答"你好，很高兴为你服务。"。
+
 #### FunctionDef get_version_details(version_key)
+
 **get_version_details函数的功能**: 根据提供的版本关键字返回相应的版本信息。
 
 **参数**:
+
 - **version_key**: 用于查询版本信息的关键字。
 
 **代码描述**:
 `get_version_details`函数接受一个参数`version_key`，该参数用于在一个预定义的映射（`version_mapping`）中查找对应的版本信息。如果给定的`version_key`在映射中存在，函数将返回该关键字对应的值。如果不存在，函数将返回一个包含`domain`和`url`两个键，它们的值都为`None`的字典。这意味着，当无法根据提供的关键字找到版本信息时，函数提供了一种优雅的失败处理方式，避免了可能的错误或异常。
 
 **注意**:
+
 - 确保`version_mapping`是在函数调用之前已经定义并且正确初始化的，且包含所有可能用到的版本关键字及其对应的信息。
 - 调用此函数时，传入的`version_key`应确保是字符串类型，且在`version_mapping`中有对应的条目。
 
 **输出示例**:
 假设`version_mapping`已经定义如下：
+
 ```python
 version_mapping = {
     "v1.0": {"domain": "example.com", "url": "/api/v1"},
     "v2.0": {"domain": "example.com", "url": "/api/v2"}
 }
 ```
+
 当调用`get_version_details("v1.0")`时，函数将返回：
+
 ```python
 {"domain": "example.com", "url": "/api/v1"}
 ```
+
 如果调用`get_version_details("v3.0")`（假设`v3.0`不在`version_mapping`中），函数将返回：
+
 ```python
 {"domain": None, "url": None}
 ```
+
 ***
 ***
+
 ### FunctionDef get_embeddings(self, params)
+
 **get_embeddings**: 此函数的功能是打印嵌入信息和参数。
 
 **参数**:
+
 - `params`: 此参数用于接收传入的参数信息。
 
 **代码描述**:
@@ -149,14 +182,19 @@ version_mapping = {
 在实际应用中，`params`参数可以是任何类型的数据，但通常期望是与嵌入向量相关的配置或数据。例如，它可以是一个字典，包含了不同的配置选项或者是直接与嵌入向量相关的数据。
 
 **注意**:
+
 - 由于此函数主要用于打印信息，因此在生产环境中可能需要根据实际需求进行修改或扩展，以实现更具体的功能。
 - 确保传入的`params`参数包含了函数处理所需的所有必要信息，以避免运行时错误。
 - 此函数目前看起来主要用于演示或调试目的，因此在将其应用于实际项目中时，可能需要进一步开发以满足特定的业务需求。
+
 ***
+
 ### FunctionDef make_conv_template(self, conv_template, model_path)
+
 **make_conv_template**: 该函数用于创建一个对话模板。
 
 **参数**:
+
 - **conv_template**: 字符串类型，指定对话模板的具体内容，可选参数。
 - **model_path**: 字符串类型，指定模型路径，可选参数。
 
@@ -164,11 +202,13 @@ version_mapping = {
 `make_conv_template` 函数是 `XingHuoWorker` 类的一个方法，其主要功能是创建一个对话模板。该方法接受两个参数：`conv_template` 和 `model_path`，它们都是可选的字符串参数。函数内部主要通过调用 `conv.Conversation` 类来创建一个对话实例。在这个实例中，`name` 属性被设置为 `self.model_names[0]`，即取 `model_names` 列表的第一个元素作为名称。`system_message` 属性被设置为一段固定的提示信息："你是一个聪明的助手，请根据用户的提示来完成任务"。`messages` 属性是一个空列表，表示初始时对话中没有任何消息。`roles` 属性定义了对话中的角色，这里设置为包含 "user" 和 "assistant" 的列表，表示对话参与者。`sep` 和 `stop_str` 属性分别定义了对话中消息的分隔符和停止字符串，用于在对话生成过程中标识消息的边界。
 
 **注意**:
+
 - 在使用此函数时，需要确保 `self.model_names` 列表至少包含一个元素，否则在尝试访问 `self.model_names[0]` 时会引发索引错误。
 - 该函数返回的对话实例可以用于进一步的对话处理或模拟，但需要注意的是，返回的对话实例初始时不包含任何实际对话内容。
 
 **输出示例**:
 假设 `self.model_names` 列表的第一个元素为 "ModelA"，则该函数可能返回的对话实例如下所示（此处以伪代码形式展示）:
+
 ```
 Conversation(
     name="ModelA",
@@ -179,4 +219,5 @@ Conversation(
     stop_str="###",
 )
 ```
+
 ***

@@ -1,7 +1,9 @@
 ## ClassDef ThreadSafeObject
+
 **ThreadSafeObject**: ThreadSafeObject 类的功能是提供一个线程安全的对象封装，用于在多线程环境中安全地访问和修改对象。
 
 **属性**:
+
 - `_obj`: 存储实际对象的属性，可以是任何类型。
 - `_key`: 对象的键，用于标识对象，可以是字符串或元组。
 - `_pool`: 对象所属的缓存池，类型为 `CachePool`，默认为 None。
@@ -16,6 +18,7 @@ ThreadSafeObject 类通过封装对象、键、所属缓存池以及同步机制
 ThreadSafeObject 类还被用作其他特定类型对象的基类，例如 ThreadSafeFaiss 类，后者在 ThreadSafeObject 的基础上增加了与 FAISS 相关的功能，如文档计数和保存到磁盘等。
 
 **注意**:
+
 - 在多线程环境中操作共享资源时，使用 ThreadSafeObject 可以避免数据竞争和其他并发问题。
 - 使用 `acquire` 方法时，应确保使用 `with` 语句或手动释放锁，以避免死锁。
 - 修改 `_obj` 属性时，应通过 `obj` 属性的 setter 方法，以确保线程安全。
@@ -23,10 +26,13 @@ ThreadSafeObject 类还被用作其他特定类型对象的基类，例如 Threa
 **输出示例**:
 假设有一个 ThreadSafeObject 实例，其 `_key` 为 "example_key"，`_obj` 为某个自定义对象。调用 `__repr__` 方法可能会返回如下字符串：
 `"<ThreadSafeObject: key: example_key, obj: <自定义对象的表示>>"`
-### FunctionDef __init__(self, key, obj, pool)
-**__init__**: 该函数用于初始化ThreadSafeObject对象。
+
+### FunctionDef **init**(self, key, obj, pool)
+
+****init****: 该函数用于初始化ThreadSafeObject对象。
 
 **参数**:
+
 - `key`: 可以是字符串或元组，用于标识对象。
 - `obj`: 初始化时分配给ThreadSafeObject的对象，默认为None。
 - `pool`: 一个CachePool实例，用于存储缓存对象，默认为None。
@@ -37,12 +43,16 @@ ThreadSafeObject 类还被用作其他特定类型对象的基类，例如 Threa
 在对象初始化过程中，首先将传入的`obj`、`key`和`pool`参数分别赋值给内部变量`_obj`、`_key`和`_pool`。接着，使用`threading.RLock()`创建一个可重入锁（Reentrant Lock），并将其赋值给`_lock`属性，这样可以确保对象的线程安全访问。最后，创建一个`threading.Event()`实例赋值给`_loaded`属性，这个事件对象用于控制对象加载状态的同步。
 
 **注意**:
+
 - 在多线程环境下操作同一个`ThreadSafeObject`实例时，应确保正确使用`_lock`来避免数据竞争。
 - `key`参数是必须的，因为它用于唯一标识一个`ThreadSafeObject`实例。
 - 如果提供了`pool`参数，那么这个`ThreadSafeObject`实例将与指定的缓存池相关联，这在管理多个缓存对象时非常有用。
+
 ***
-### FunctionDef __repr__(self)
-**__repr__**: 此函数的功能是返回对象的官方字符串表示。
+
+### FunctionDef **repr**(self)
+
+****repr****: 此函数的功能是返回对象的官方字符串表示。
 
 **参数**: 此函数没有参数。
 
@@ -53,11 +63,15 @@ ThreadSafeObject 类还被用作其他特定类型对象的基类，例如 Threa
 **注意**: 在使用 `__repr__` 方法时，需要确保对象的 `_key` 和 `_obj` 属性已经被正确初始化，否则可能会导致错误。此外，考虑到 `__repr__` 方法的输出可能会被用于日志记录，应确保包含的信息既有用又不过于冗长。
 
 **输出示例**: 假设对象的类名为 `ThreadSafeObject`，`_key` 属性的值为 `"example_key"`，`_obj` 属性的值为 `"example_object"`，那么调用 `__repr__` 方法将返回：
+
 ```
 <ThreadSafeObject: key: example_key, obj: example_object>
 ```
+
 ***
+
 ### FunctionDef key(self)
+
 **key**: 此函数的功能是获取对象的键值。
 
 **参数**: 此函数没有参数。
@@ -69,14 +83,19 @@ ThreadSafeObject 类还被用作其他特定类型对象的基类，例如 Threa
 **注意**: 使用此函数时，需要确保 `_key` 属性已经被正确初始化，否则可能会引发错误。此外，考虑到线程安全，访问 `_key` 属性时应当小心处理同步问题，尽管在此函数的实现中看似简单，但在多线程环境下使用时应当保持警惕。
 
 **输出示例**: 假设 `_key` 属性的值为 `"example_key"`，那么调用 `key` 函数将返回：
+
 ```
 "example_key"
 ```
+
 ***
+
 ### FunctionDef acquire(self, owner, msg)
+
 **acquire**: 此函数的功能是安全地获取并操作对象资源。
 
 **参数**:
+
 - `owner`: 字符串类型，默认为空字符串，表示资源的拥有者。如果未提供，则默认使用当前线程的ID。
 - `msg`: 字符串类型，默认为空字符串，用于附加额外的日志信息。
 
@@ -88,11 +107,15 @@ ThreadSafeObject 类还被用作其他特定类型对象的基类，例如 Threa
 在`finally`块中，无论资源操作是否成功，都会释放之前获取的锁，确保资源的安全释放，避免死锁的发生。
 
 **注意**:
+
 - 使用`acquire`函数时，需要确保`_lock`属性已经被正确初始化为一个锁对象，否则在尝试获取锁时会引发异常。
 - 在多线程环境下操作共享资源时，正确使用锁是非常重要的，以避免数据竞争和不一致的问题。
 - `acquire`函数设计为一个上下文管理器，推荐使用`with`语句进行调用，以确保资源的正确获取和释放。
+
 ***
+
 ### FunctionDef start_loading(self)
+
 **start_loading**: 此函数的功能是清除加载状态。
 
 **参数**: 此函数没有参数。
@@ -101,7 +124,9 @@ ThreadSafeObject 类还被用作其他特定类型对象的基类，例如 Threa
 
 **注意**: 使用 `start_loading` 方法时，需要确保任何依赖于对象加载状态的操作都能正确处理对象的未加载状态。此外，考虑到这是一个线程安全的对象，`start_loading` 方法的调用应该在适当的同步机制下进行，以避免并发访问导致的问题。
 ***
+
 ### FunctionDef finish_loading(self)
+
 **finish_loading**: 此函数的功能是标记对象加载完成。
 
 **参数**: 此函数没有参数。
@@ -114,7 +139,9 @@ ThreadSafeObject 类还被用作其他特定类型对象的基类，例如 Threa
 
 **注意**: 使用`finish_loading`方法时，需要确保在对象的加载或初始化逻辑正确完成后调用此方法。此外，调用此方法前，通常会有线程锁的操作，以确保线程安全。在调用`finish_loading`之后，其他线程可以通过检查相应的线程安全标志来确定对象是否已经加载完成，从而进行后续操作。
 ***
+
 ### FunctionDef wait_for_loading(self)
+
 **wait_for_loading**: 此函数的功能是等待直到对象加载完成。
 
 **参数**: 此函数没有参数。
@@ -123,7 +150,9 @@ ThreadSafeObject 类还被用作其他特定类型对象的基类，例如 Threa
 
 **注意**: 使用 `wait_for_loading` 方法时，需要确保 `_loaded` 事件在对象加载完成后被正确设置，否则调用此方法的线程可能会无限期地阻塞。此外，考虑到多线程编程的复杂性，开发者应当仔细管理线程间的同步和通信，以避免死锁或资源竞争等问题。
 ***
+
 ### FunctionDef obj(self)
+
 **obj**: 此函数的功能是获取ThreadSafeObject对象中的_obj属性。
 
 **参数**: 此函数没有参数。
@@ -142,10 +171,13 @@ embeddings = thread_safe_object_instance.obj()
 
 这里，`embeddings`将是之前存储在ThreadSafeObject实例中的嵌入向量对象。
 ***
+
 ### FunctionDef obj(self, val)
+
 **obj**: obj函数用于设置ThreadSafeObject实例的内部对象。
 
 **参数**:
+
 - `val`: 任意类型，表示要设置的值。
 
 **代码描述**:
@@ -156,13 +188,18 @@ obj函数是ThreadSafeObject类的一个成员方法，其主要功能是将传�
 同样，在`KBFaissPool`和`MemoFaissPool`的`load_vector_store`方法中，obj函数被用于设置加载或创建的向量存储对象。这些方法首先检查缓存中是否已存在所需的向量存储，如果不存在，则创建一个新的ThreadSafeFaiss实例，并通过obj函数将向量存储对象赋值给它。这确保了向量存储的加载和初始化过程是线程安全的。
 
 **注意**:
+
 - 使用obj函数时，需要确保传入的`val`参数是正确的类型，因为函数内部不进行类型检查。
 - 在多线程环境中使用obj函数修改对象状态时，应注意同步和并发控制，以避免数据竞争和不一致性问题。虽然obj函数本身的操作是简单的赋值，但它在项目中的应用场景通常涉及到线程安全的上下文，因此正确的使用方式对于保持程序的稳定性和正确性至关重要。
+
 ***
+
 ## ClassDef CachePool
+
 **CachePool**: CachePool 类的功能是提供一个线程安全的缓存池，用于存储和管理缓存对象。
 
 **属性**:
+
 - `_cache_num`: 缓存池中允许存储的最大缓存对象数量。如果设置为-1，则不限制数量。
 - `_cache`: 一个有序字典，用于存储缓存对象。
 - `atomic`: 一个线程锁，确保缓存操作的线程安全。
@@ -182,15 +219,19 @@ CachePool 类提供了一个线程安全的缓存池实现，允许用户存储�
 CachePool 类在项目中被其他对象如 `EmbeddingsPool` 和 `_FaissPool` 调用，用于管理嵌入向量和向量存储的缓存。这些调用情况表明 CachePool 类在知识库嵌入向量和向量存储管理中起到了核心作用，为上层提供了缓存管理和线程安全的支持。
 
 **注意**:
+
 - 在多线程环境下操作缓存时，应确保正确使用 `atomic` 锁来避免数据竞争。
 - 当设置 `_cache_num` 限制缓存数量时，需要注意缓存淘汰策略可能会影响到缓存对象的可用性。
 
 **输出示例**:
 由于 CachePool 主要提供缓存管理功能，其输出依赖于存储在缓存中的对象类型。例如，如果缓存中存储的是嵌入向量对象，那么 `get` 方法可能返回一个嵌入向量对象的实例。
-### FunctionDef __init__(self, cache_num)
-**__init__**: 此函数的功能是初始化CachePool对象。
+
+### FunctionDef **init**(self, cache_num)
+
+****init****: 此函数的功能是初始化CachePool对象。
 
 **参数**:
+
 - `cache_num`: 整型，表示缓存中允许的最大元素数量，默认值为-1，表示不限制数量。
 - `self._cache`: 使用`OrderedDict`初始化，用于存储缓存数据，保持插入顺序。
 - `self.atomic`: 使用`threading.RLock`初始化，提供一个基于线程的锁，用于控制对缓存数据的并发访问，确保线程安全。
@@ -199,11 +240,15 @@ CachePool 类在项目中被其他对象如 `EmbeddingsPool` 和 `_FaissPool` �
 此函数是`CachePool`类的构造函数，用于初始化一个缓存池对象。它接受一个参数`cache_num`，该参数指定了缓存中可以存储的最大元素数量。如果`cache_num`的值为-1，则表示缓存大小不受限制。函数内部首先将`cache_num`参数的值赋给对象的`_cache_num`属性，用于后续控制缓存大小。接着，使用`OrderedDict`初始化`_cache`属性，`OrderedDict`是一种特殊的字典，它可以记住元素被插入的顺序，这对于某些缓存淘汰策略（如最近最少使用LRU）是非常有用的。最后，通过`threading.RLock`创建一个可重入锁`atomic`，赋给对象的`atomic`属性。这个锁用于同步对缓存的访问，确保在多线程环境下对缓存的操作是线程安全的。
 
 **注意**:
+
 - 在多线程环境下操作缓存时，应确保正确使用`self.atomic`锁，以避免数据竞争和不一致的问题。
 - `cache_num`的默认值为-1，意味着如果不特别指定，缓存大小不会受到限制。在实际应用中，根据需要合理设置此参数，以避免因缓存过大而消耗过多内存资源。
 - `OrderedDict`虽然可以保持元素的插入顺序，但在处理大量数据时可能会比普通字典有更高的性能开销，因此在设计缓存策略时应考虑到这一点。
+
 ***
+
 ### FunctionDef keys(self)
+
 **keys**: 此函数的作用是获取缓存中所有键的列表。
 
 **参数**: 此函数没有参数。
@@ -215,11 +260,15 @@ CachePool 类在项目中被其他对象如 `EmbeddingsPool` 和 `_FaissPool` �
 **注意**: 使用此函数时，需要确保 `_cache` 已经被正确初始化并且包含了所需的数据。此外，返回的键列表仅代表了函数被调用时刻缓存中的状态，缓存内容的后续更新不会反映在已返回的列表中。
 
 **输出示例**: 假设缓存中存储了三个键，分别为 `"key1"`, `"key2"`, `"key3"`，那么调用 `keys` 函数将返回以下列表：
+
 ```python
 ["key1", "key2", "key3"]
 ```
+
 ***
+
 ### FunctionDef _check_count(self)
+
 **_check_count**: 此函数的功能是检查缓存中的项目数量，并确保其不超过设定的最大值。
 
 **参数**: 此函数没有参数。
@@ -230,10 +279,13 @@ CachePool 类在项目中被其他对象如 `EmbeddingsPool` 和 `_FaissPool` �
 
 **注意**: `_check_count` 是一个私有方法，意味着它仅在 `CachePool` 类内部使用，不应该被类外部直接调用。这种设计封装了缓存管理的细节，使得 `CachePool` 类的使用更加安全和方便。在使用 `CachePool` 类时，开发者无需直接管理缓存大小，而是通过设置 `_cache_num` 并使用 `set` 方法来间接控制。
 ***
+
 ### FunctionDef get(self, key)
+
 **get**: 此函数的功能是从缓存池中获取与给定键关联的线程安全对象。
 
 **参数**:
+
 - `key`: 字符串类型，用于从缓存中检索对象的键。
 
 **代码描述**:
@@ -242,16 +294,20 @@ CachePool 类在项目中被其他对象如 `EmbeddingsPool` 和 `_FaissPool` �
 在项目中，`get` 函数被多个地方调用，包括但不限于加载嵌入向量、保存和卸载向量存储、以及在工作线程中操作向量存储。这些调用场景表明，`get` 函数是处理缓存对象的关键组件，特别是在需要确保对象加载完成后再进行操作的情况下。
 
 **注意**:
+
 - 使用 `get` 函数时，应确保提供的键 `key` 在缓存中确实存在，否则函数将返回 `None`。
 - 在多线程环境下，`get` 函数通过 `wait_for_loading` 方法确保了线程安全，避免了在对象加载完成前的竞态条件。
 
 **输出示例**:
 假设缓存中存在一个键为 `"example_key"` 的 `ThreadSafeObject` 实例，且该实例已完成加载。调用 `get("example_key")` 将返回该 `ThreadSafeObject` 实例。如果 `"example_key"` 不存在于缓存中，函数将返回 `None`。
 ***
+
 ### FunctionDef set(self, key, obj)
+
 **set**: 此函数的功能是将一个线程安全的对象添加到缓存池中，并返回该对象。
 
 **参数**:
+
 - `key`: 字符串类型，用于标识缓存中的对象。
 - `obj`: `ThreadSafeObject` 类型，表示要添加到缓存中的线程安全对象。
 
@@ -260,16 +316,20 @@ CachePool 类在项目中被其他对象如 `EmbeddingsPool` 和 `_FaissPool` �
 在项目中，`set` 函数被用于多个场景，包括但不限于加载嵌入向量（`load_embeddings`）、加载向量存储（`load_vector_store`）等。这些场景中，`set` 函数负责将新创建或加载的资源（如嵌入向量、向量存储）以线程安全的方式添加到缓存池中，确保后续可以高效、安全地访问这些资源。
 
 **注意**:
+
 - 使用 `set` 函数时，需要确保传入的键 `key` 在缓存池中唯一，以避免覆盖已有的缓存项。
 - 由于 `set` 函数会检查缓存池的大小并在必要时移除最早的缓存项，开发者应当合理设置缓存池的最大容量 `_cache_num`，以平衡内存使用和性能需求。
 - 在多线程环境下，`set` 函数保证了添加缓存项的线程安全性，但在使用缓存项时，仍需注意线程安全的访问和操作。
 
 **输出示例**: 假设调用 `set` 函数添加了一个键为 `"example_key"`，对象为某个 `ThreadSafeObject` 实例的缓存项，函数将返回这个 `ThreadSafeObject` 实例。
 ***
+
 ### FunctionDef pop(self, key)
+
 **pop**: 该函数用于从缓存池中移除并返回指定键的对象或最早添加的对象。
 
 **参数**:
+
 - `key`: 字符串类型，指定要移除对象的键。默认为 None，表示移除并返回最早添加的对象。
 
 **代码描述**:
@@ -278,16 +338,20 @@ CachePool 类在项目中被其他对象如 `EmbeddingsPool` 和 `_FaissPool` �
 在项目中，`pop` 方法被多个场景调用，例如在 `upload_temp_docs` 函数中，用于移除之前的临时文档；在 `unload_vector_store` 方法中，用于释放向量库；在 `do_clear_vs` 方法中，用于清除特定的向量存储；以及在 `drop_kb_summary` 方法中，用于删除知识库摘要。这些调用场景表明 `pop` 方法在管理缓存资源、维护缓存状态和释放不再需要的资源方面起着关键作用。
 
 **注意**:
+
 - 在使用 `pop` 方法时，应确保键的正确性和存在性，特别是在期望移除特定对象时。如果键不存在，方法将返回 `None`，而不是抛出异常。
 - 当不需要指定键移除对象时，应注意 `pop` 方法将移除并返回最早添加的对象，这可能会影响缓存的使用逻辑。
 
 **输出示例**:
 假设缓存中存在键为 "example_key" 的 `ThreadSafeObject` 对象，调用 `pop("example_key")` 将返回该对象，并从缓存中移除。如果缓存为空或键不存在，调用 `pop("nonexistent_key")` 将返回 `None`。
 ***
+
 ### FunctionDef acquire(self, key, owner, msg)
+
 **acquire**: 此函数的功能是从缓存池中安全地获取与给定键关联的对象。
 
 **参数**:
+
 - `key`: 字符串或元组类型，用于从缓存中检索对象的键。
 - `owner`: 字符串类型，默认为空字符串，表示请求对象的所有者。
 - `msg`: 字符串类型，默认为空字符串，用于附加消息或说明。
@@ -298,6 +362,7 @@ CachePool 类在项目中被其他对象如 `EmbeddingsPool` 和 `_FaissPool` �
 在项目中，`acquire` 函数被用于安全地获取缓存中的对象，以进行后续操作。例如，在 `knowledge_base_chat_iterator` 函数中，通过调用 `acquire` 方法来获取知识库中的向量存储对象，以执行相似度搜索等操作。
 
 **注意**:
+
 - 在使用 `acquire` 函数时，应确保提供的键 `key` 在缓存中确实存在，否则会抛出异常。
 - 当获取到的对象是 `ThreadSafeObject` 类型的实例时，应通过 `with` 语句或其他方式确保在操作完成后释放锁，以避免潜在的死锁问题。
 - `acquire` 方法的使用场景主要集中在需要线程安全访问和操作缓存对象的情况。
@@ -305,10 +370,13 @@ CachePool 类在项目中被其他对象如 `EmbeddingsPool` 和 `_FaissPool` �
 **输出示例**:
 由于 `acquire` 函数的返回值取决于缓存中对象的类型，因此可能有不同的返回形式。如果缓存中的对象是 `ThreadSafeObject` 类型的实例，则返回值将是该对象的引用；如果是其他类型的对象，则直接返回该对象。例如，如果缓存中存在键为 `"example_key"` 的 `ThreadSafeObject` 实例，调用 `acquire("example_key")` 将返回该实例的引用。如果 `"example_key"` 对应的是非 `ThreadSafeObject` 类型的对象，则直接返回该对象。
 ***
+
 ### FunctionDef load_kb_embeddings(self, kb_name, embed_device, default_embed_model)
+
 **load_kb_embeddings**: 此函数的功能是加载指定知识库名称的嵌入向量。
 
 **参数**:
+
 - `kb_name`: 字符串类型，指定要加载嵌入向量的知识库名称。
 - `embed_device`: 字符串类型，默认值由`embedding_device`函数确定，用于指定计算设备。
 - `default_embed_model`: 字符串类型，默认值为`EMBEDDING_MODEL`，用于指定默认的嵌入模型。
@@ -317,6 +385,7 @@ CachePool 类在项目中被其他对象如 `EmbeddingsPool` 和 `_FaissPool` �
 此函数首先从`knowledge_base_repository`中调用`get_kb_detail`函数，根据`kb_name`获取知识库的详细信息，包括嵌入模型名称。如果知识库详情中包含嵌入模型名称，则使用该名称；否则，使用传入的`default_embed_model`作为嵌入模型名称。接着，函数检查该嵌入模型是否在在线模型列表中，该列表由`list_online_embed_models`函数提供。如果嵌入模型存在于在线模型列表中，则通过`EmbeddingsFunAdapter`类创建一个嵌入向量适配器实例并返回。如果嵌入模型不在在线模型列表中，则调用`embeddings_pool`的`load_embeddings`方法，根据模型名称和设备类型加载嵌入向量，并返回加载的嵌入向量实例。
 
 **注意**:
+
 - 在调用此函数时，需要确保传入的`kb_name`是存在的知识库名称，且知识库中有对应的嵌入模型信息。
 - `embed_device`参数应根据实际计算环境选择合适的设备类型，如`"cuda"`、`"mps"`或`"cpu"`。
 - 此函数依赖于`EmbeddingsFunAdapter`类和`embeddings_pool`的`load_embeddings`方法，因此在使用前应确保相关依赖正确配置。
@@ -324,10 +393,13 @@ CachePool 类在项目中被其他对象如 `EmbeddingsPool` 和 `_FaissPool` �
 **输出示例**:
 假设知识库名称为"技术文档库"，且该知识库使用的嵌入模型在在线模型列表中，则可能返回一个`EmbeddingsFunAdapter`实例。如果嵌入模型不在在线模型列表中，则可能返回由`load_embeddings`方法加载的嵌入向量实例，具体类型取决于加载的嵌入模型。
 ***
+
 ## ClassDef EmbeddingsPool
+
 **EmbeddingsPool**: EmbeddingsPool 类的功能是管理和加载不同模型的嵌入向量。
 
 **属性**:
+
 - 无特定公开属性，继承自 CachePool 类的属性。
 
 **代码描述**:
@@ -338,20 +410,26 @@ EmbeddingsPool 类继承自 CachePool 类，专门用于加载和管理嵌入向
 此外，`load_embeddings` 方法在加载嵌入向量之前会通过 `atomic` 锁确保线程安全，避免在并发环境下的数据竞争问题。加载完成后，嵌入向量对象会被存储在缓存中，以便后续快速获取。
 
 **注意**:
+
 - 使用 `load_embeddings` 方法时，需要确保传入的模型和设备参数正确，否则可能无法加载正确的嵌入向量。
 - 在多线程环境下使用此类时，其内部的线程安全机制可以保护嵌入向量的加载过程，但调用者仍需注意线程安全的其他方面。
 - 由于嵌入向量可能占用大量内存，应合理管理缓存大小，避免内存溢出。
 
 **输出示例**:
 调用 `load_embeddings` 方法可能返回的嵌入向量对象示例：
+
 ```python
 embeddings = embeddings_pool.load_embeddings(model="text-embedding-ada-002", device="cuda")
 ```
+
 此代码行将返回一个针对 "text-embedding-ada-002" 模型的 `OpenAIEmbeddings` 对象，该对象已配置好与 OpenAI API 交互所需的所有参数，并准备好在指定的设备上进行嵌入向量的计算。
+
 ### FunctionDef load_embeddings(self, model, device)
+
 **load_embeddings**: 此函数的功能是加载并返回指定模型和设备上的嵌入向量对象。
 
 **参数**:
+
 - `model`: 字符串类型，指定要加载的嵌入模型名称。如果未提供，则使用默认的嵌入模型。
 - `device`: 字符串类型，指定计算设备。如果未提供，则通过`embedding_device`函数自动检测并选择合适的设备。
 
@@ -363,6 +441,7 @@ embeddings = embeddings_pool.load_embeddings(model="text-embedding-ada-002", dev
 加载完成后，将嵌入向量对象赋值给`ThreadSafeObject`实例的`obj`属性，并标记加载完成。如果缓存中已存在对应的嵌入向量对象，则直接返回该对象。
 
 **注意**:
+
 - 在使用此函数时，应确保提供的模型名称和计算设备类型正确，以便正确加载嵌入向量。
 - 函数内部使用了多线程安全机制，包括锁和`ThreadSafeObject`，以确保在并发环境下的操作安全。
 - 加载嵌入向量可能需要一定的时间，特别是首次加载时，因此在设计应用逻辑时应考虑到可能的延迟。

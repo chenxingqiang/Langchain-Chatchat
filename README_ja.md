@@ -19,11 +19,11 @@ ChatGLM などの大規模な言語モデルや Langchain などのアプリケ�
 - [イントロ](README_ja.md#イントロ)
 - [ペインポイントへの対応](README_ja.md#ペインポイントへの対応)
 - [クイックスタート](README_ja.md#クイックスタート)
-    - [1. 環境セットアップ](README_ja.md#環境セットアップ)
-    - [2. モデルをダウンロード](README_ja.md#モデルをダウンロード)
-    - [3. ナレッジベースと設定ファイルの初期化](README_ja.md#ナレッジベースと設定ファイルの初期化)
-    - [4. ワンクリック起動](README_ja.md#ワンクリック起動)
-    - [5. 起動インターフェースの例](README_ja.md#起動インターフェースの例)
+  - [1. 環境セットアップ](README_ja.md#環境セットアップ)
+  - [2. モデルをダウンロード](README_ja.md#モデルをダウンロード)
+  - [3. ナレッジベースと設定ファイルの初期化](README_ja.md#ナレッジベースと設定ファイルの初期化)
+  - [4. ワンクリック起動](README_ja.md#ワンクリック起動)
+  - [5. 起動インターフェースの例](README_ja.md#起動インターフェースの例)
 - [お問い合わせ](README_ja.md#お問い合わせ)
 
 ## イントロ
@@ -126,9 +126,9 @@ LangChain-Chachat `0.2.x` シリーズは Langchain `0.0.x` シリーズ用で�
 をインストールし、次のように実行する必要があります:
 
 ```Shell
-$ git lfs install
-$ git clone https://huggingface.co/THUDM/chatglm2-6b
-$ git clone https://huggingface.co/moka-ai/m3e-base
+git lfs install
+git clone https://huggingface.co/THUDM/chatglm2-6b
+git clone https://huggingface.co/moka-ai/m3e-base
 ```
 
 ### ナレッジベースと設定ファイルの初期化
@@ -136,8 +136,8 @@ $ git clone https://huggingface.co/moka-ai/m3e-base
 以下の手順に従って、ナレッジベースと設定ファイルを初期化してください:
 
 ```shell
-$ python copy_config_example.py
-$ python init_database.py --recreate-vs
+python copy_config_example.py
+python init_database.py --recreate-vs
  ```
 
 ### ワンクリック起動
@@ -145,7 +145,7 @@ $ python init_database.py --recreate-vs
 プロジェクトを開始するには、次のコマンドを実行します:
 
 ```shell
-$ python startup.py -a
+python startup.py -a
 ```
 
 ### 起動インターフェースの例
@@ -173,15 +173,15 @@ $ python startup.py -a
 
 ## プロジェクトのマイルストーン
 
-+ `2023 年 4 月`: `Langchain-ChatGLM 0.1.0` がリリースされ、ChatGLM-6B モデルに基づくローカル ナレッジ ベースの質問と回答がサポートされました。
-+ `2023 年 8 月`: `Langchain-ChatGLM` は `Langchain-Chatchat` に名前変更され、モデル読み込みソリューションとして `fastchat` を使用し、より多くのモデルとデータベースをサポートする `0.2.0` がリリースされました。
-+ `2023 年 10 月`: `Langchain-Chachat 0.2.5` リリース、エージェント コンテンツ、オープンソース プロジェクトを`Founder Park & Zhipu AI & Zilliz`で開始
+- `2023 年 4 月`: `Langchain-ChatGLM 0.1.0` がリリースされ、ChatGLM-6B モデルに基づくローカル ナレッジ ベースの質問と回答がサポートされました。
+- `2023 年 8 月`: `Langchain-ChatGLM` は `Langchain-Chatchat` に名前変更され、モデル読み込みソリューションとして `fastchat` を使用し、より多くのモデルとデータベースをサポートする `0.2.0` がリリースされました。
+- `2023 年 10 月`: `Langchain-Chachat 0.2.5` リリース、エージェント コンテンツ、オープンソース プロジェクトを`Founder Park & Zhipu AI & Zilliz`で開始
   開催したハッカソンでは3位に入賞しました。
-+ `2023 年 12 月`: `Langchain-Chachat`オープンソース プロジェクトは **20,000** つ以上のスターを獲得しました。
-+ `2024 年 1 月`: `LangChain 0.1.x` がリリースされ、`Langchain-Chachat 0.2.x` が安定版 `0.2.10` をリリースしました。
+- `2023 年 12 月`: `Langchain-Chachat`オープンソース プロジェクトは **20,000** つ以上のスターを獲得しました。
+- `2024 年 1 月`: `LangChain 0.1.x` がリリースされ、`Langchain-Chachat 0.2.x` が安定版 `0.2.10` をリリースしました。
   今後はアップデートと技術サポートを停止し、より適用性の高い`Langchain-Chachat 0.3.x`の開発に努める予定です。
 
-+ 🔥 これからのChatchatストーリーを一緒に楽しみにしましょう···
+- 🔥 これからのChatchatストーリーを一緒に楽しみにしましょう···
 
 ---
 

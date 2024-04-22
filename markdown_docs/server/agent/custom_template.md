@@ -1,7 +1,9 @@
 ## ClassDef CustomPromptTemplate
+
 **CustomPromptTemplate**: CustomPromptTemplate类的功能是根据提供的模板和工具列表，格式化生成一个定制化的提示字符串。
 
 **属性**:
+
 - `template`: 字符串类型，用于定义提示信息的模板。
 - `tools`: Tool对象的列表，每个Tool对象包含工具的名称和描述。
 
@@ -11,16 +13,19 @@ CustomPromptTemplate类继承自StringPromptTemplate，主要用于生成定制�
 在项目中，CustomPromptTemplate类被用于`server/chat/agent_chat.py/agent_chat/agent_chat_iterator`中，以生成与用户交互的提示信息。通过提供的模板和工具列表，CustomPromptTemplate能够生成包含工具使用说明和中间步骤描述的提示信息，这对于指导用户如何与代理进行交互是非常有用的。特别是在异步的聊天环境中，准确和详细的提示信息能够极大地提升用户体验。
 
 **注意**:
+
 - 在使用CustomPromptTemplate时，需要确保传递给`format`方法的`intermediate_steps`参数格式正确，即包含动作和观察的元组列表。
 - 工具列表`tools`应包含所有可能会在提示信息中提及的工具，每个工具都应有名称和描述。
 
 **输出示例**:
 假设有以下模板和工具列表：
+
 - 模板：`"请使用以下工具：{tools}\n{agent_scratchpad}"`
 - 工具列表：`[Tool(name="Tool1", description="This is tool 1"), Tool(name="Tool2", description="This is tool 2")]`
 - `intermediate_steps`：`[("action1", "observation1"), ("action2", "observation2")]`
 
 调用`format`方法后，可能返回的字符串为：
+
 ```
 请使用以下工具：
 Tool1: This is tool 1
@@ -31,10 +36,13 @@ Thought: action2
 Observation: observation2
 Thought: 
 ```
+
 ### FunctionDef format(self)
+
 **功能**: `format` 函数的功能是根据提供的参数和内部逻辑，格式化并返回一个字符串。
 
 **参数**:
+
 - `**kwargs`: 关键字参数，可以接受多个命名参数，用于动态传递给模板和内部逻辑处理。
 
 **代码描述**:
@@ -45,11 +53,13 @@ Thought:
 最后，函数使用`self.template.format(**kwargs)`语句，将处理好的`kwargs`字典作为参数，传递给模板的`format`方法，并返回格式化后的字符串。
 
 **注意**:
+
 - 确保传入的`kwargs`中包含`intermediate_steps`键，且其值格式正确。
 - `self.tools`应该是一个包含有`name`和`description`属性的对象列表。
 - 该函数依赖于`self.template`的`format`方法，确保`self.template`已正确初始化并可以接受`kwargs`作为参数。
 
 **输出示例**:
+
 ```plaintext
 Action: Move Forward
 Observation: Wall detected
@@ -58,11 +68,15 @@ Tool1: Used for cutting
 Tool2: Used for digging
 Tool Names: Tool1, Tool2
 ```
+
 ***
+
 ## ClassDef CustomOutputParser
+
 **CustomOutputParser**: CustomOutputParser类的功能是解析大模型输出，并根据输出内容决定下一步操作。
 
 **属性**:
+
 - `begin`: 一个布尔值，用于指示解析过程是否应该开始或停止。
 
 **代码描述**:
@@ -73,22 +87,28 @@ CustomOutputParser类继承自AgentOutputParser，是一个专门用于解析大
 如果输出中包含"Final Answer:"，则表示大模型已经给出了最终答案，解析器将重置`begin`为True，并返回一个包含最终答案的AgentFinish对象。如果输出中包含"Action:"，则解析器会解析出相应的操作和输入，尝试执行该操作，并返回一个AgentAction对象。如果解析过程中遇到异常，或者输出不符合预期的格式，解析器将返回一个包含错误信息的AgentFinish对象。
 
 **注意**:
+
 - 在使用CustomOutputParser时，需要确保大模型的输出格式与解析器预期的格式相匹配，否则可能无法正确解析出操作指令。
 - 解析器依赖于输出中的特定关键词或短语来决定操作，因此在设计大模型的输出格式时，需要考虑这一点。
 
 **输出示例**:
 假设大模型的输出为"Final Answer: 42"，CustomOutputParser解析后可能返回的对象为：
+
 ```
 AgentFinish(return_values={"output": "42"}, log="Final Answer: 42")
 ```
+
 如果大模型的输出为"Action: Calculate Action Input: 42 + 1"，解析后可能返回的对象为：
+
 ```
 AgentAction(tool="Calculate", tool_input="42 + 1", log="Action: Calculate Action Input: 42 + 1")
 ```
 
 在项目中，CustomOutputParser被用于解析大模型在与用户交互过程中的输出，以决定是否需要调用特定的工具或服务来辅助完成用户的请求。这使得整个系统能够更加智能和灵活地处理各种不同的用户需求。
-### FunctionDef __init__(self)
-**__init__**: 该函数用于初始化CustomOutputParser对象。
+
+### FunctionDef **init**(self)
+
+****init****: 该函数用于初始化CustomOutputParser对象。
 
 **参数**: 该函数不接受任何外部参数。
 
@@ -96,10 +116,13 @@ AgentAction(tool="Calculate", tool_input="42 + 1", log="Action: Calculate Action
 
 **注意**: 在使用CustomOutputParser类时，不需要手动传递任何参数给__init__方法。创建对象后，可以根据实际需求修改`self.begin`的值，但通常情况下，该变量的初始值True已足够满足大多数使用场景。此外，如果CustomOutputParser类继承自一个具有复杂初始化逻辑的父类，`super().__init__()`确保了这些逻辑不会被遗漏。
 ***
+
 ### FunctionDef parse(self, llm_output)
+
 **parse**: 此函数的功能是解析从大型语言模型（LLM）输出的文本，并根据输出内容决定下一步的操作。
 
 **参数**:
+
 - `llm_output`: 字符串类型，代表从大型语言模型（LLM）接收到的输出文本。
 
 **代码描述**:
@@ -112,17 +135,21 @@ AgentAction(tool="Calculate", tool_input="42 + 1", log="Action: Calculate Action
 如果上述条件都不满足，或者在解析动作时遇到异常，函数会返回一个`AgentFinish`对象，表示解析结束，同时包含错误信息或大模型自身的回答。
 
 **注意**:
+
 - 在使用此函数时，需要确保`model_container.MODEL`和`SUPPORT_AGENT_MODEL`已正确设置，以便函数能够正确判断是否有支持的代理模型。
 - 函数的返回值类型可能是`AgentFinish`、`tuple[dict[str, str], str]`或`AgentAction`，调用者需要根据返回值类型进行相应的处理。
 
 **输出示例**:
 假设`llm_output`为"Final Answer: 42"，则函数可能返回的示例为：
+
 ```python
 AgentFinish(return_values={"output": "42"}, log="Final Answer: 42")
 ```
 
-如果`llm_output`为"Action: Email Action Input: john.doe@example.com"，则函数可能返回的示例为：
+如果`llm_output`为"Action: Email Action Input: <john.doe@example.com>"，则函数可能返回的示例为：
+
 ```python
 AgentAction(tool="Email", tool_input="john.doe@example.com", log="Action: Email Action Input: john.doe@example.com")
 ```
+
 ***

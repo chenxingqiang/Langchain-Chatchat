@@ -1,7 +1,9 @@
 ## FunctionDef get_ocr(use_cuda)
+
 **get_ocr**: 此函数的功能是获取一个OCR对象，用于执行图像或PDF中的文字识别。
 
 **参数**:
+
 - use_cuda: 布尔值，指定是否使用CUDA加速。默认为True。
 
 **代码描述**:
@@ -10,6 +12,7 @@
 在项目中，`get_ocr`函数被用于不同的场景来执行OCR任务。例如，在`document_loaders/myimgloader.py`的`img2text`方法中，它被用来将图片文件中的文字识别出来；而在`document_loaders/mypdfloader.py`的`pdf2text`方法中，它被用于识别PDF文件中的文字以及PDF中嵌入图片的文字。这显示了`get_ocr`函数在项目中的多功能性和重要性，它为处理不同类型的文档提供了统一的OCR解决方案。
 
 **注意**:
+
 - 在使用`get_ocr`函数时，需要确保至少安装了`rapidocr_paddle`或`rapidocr_onnxruntime`中的一个包，以便函数能够成功返回一个OCR对象。
 - 如果计划在没有CUDA支持的环境中使用，应将`use_cuda`参数设置为False，以避免不必要的错误。
 

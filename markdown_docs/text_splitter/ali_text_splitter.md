@@ -1,7 +1,9 @@
 ## ClassDef AliTextSplitter
+
 **AliTextSplitter**: AliTextSplitter类的功能是对文本进行分割，特别是针对PDF文档或其他文本，可以选择是否使用文档语义分割模型进行更加精确的文本分割。
 
 **属性**:
+
 - `pdf`: 布尔值，指示是否对PDF文档进行特殊处理，默认为False。
 - `**kwargs`: 接收可变数量的关键字参数，这些参数将传递给父类CharacterTextSplitter的构造函数。
 
@@ -13,19 +15,25 @@ AliTextSplitter类继承自CharacterTextSplitter类，提供了对文本进行�
 使用`modelscope.pipelines`的`pipeline`函数创建一个文档分割任务，模型选择为`damo/nlp_bert_document-segmentation_chinese-base`，并指定设备为CPU。通过调用`pipeline`对象的方法对文本进行分割，得到的结果是一个包含分割后文本的列表。
 
 **注意**:
+
 - 使用此类之前，需要确保已安装`modelscope`包，特别是如果要进行文档语义分割，需要安装`modelscope[nlp]`。
 - 文档语义分割模型`damo/nlp_bert_document-segmentation_chinese-base`是基于BERT的中文文档分割模型，对于中文文本有较好的分割效果。
 - 在低配置的GPU环境下，由于模型较大，建议将设备设置为CPU进行文本分割处理，以避免可能的性能问题。
 
 **输出示例**:
+
 ```python
 ['这是第一段文本。', '这是第二段文本，包含多个句子。', '这是第三段文本。']
 ```
+
 此输出示例展示了`split_text`方法返回的分割后的文本列表，每个元素代表文档中的一段文本。
-### FunctionDef __init__(self, pdf)
-**__init__**: 此函数的功能是初始化AliTextSplitter类的实例。
+
+### FunctionDef **init**(self, pdf)
+
+****init****: 此函数的功能是初始化AliTextSplitter类的实例。
 
 **参数**:
+
 - `pdf`: 一个布尔值，用于指定是否处理PDF文件，默认值为False。
 - `**kwargs`: 接收一个可变数量的关键字参数，这些参数将传递给父类的初始化方法。
 
@@ -35,13 +43,18 @@ AliTextSplitter类继承自CharacterTextSplitter类，提供了对文本进行�
 此外，通过`**kwargs`参数，此函数支持接收额外的关键字参数，这些参数不在函数定义中直接声明。这些额外的参数通过`super().__init__(**kwargs)`语句传递给父类的初始化方法。这种设计允许`AliTextSplitter`类在不修改其构造函数签名的情况下，灵活地扩展或修改其父类的行为。
 
 **注意**:
+
 - 在使用`AliTextSplitter`类时，应根据实际需求决定是否将`pdf`参数设置为True。如果您的应用场景中需要处理PDF文件，则应将此参数设置为True。
 - 通过`**kwargs`传递给父类的参数应确保与父类的初始化方法兼容，避免传递无效或不相关的参数，以免引发错误。
+
 ***
+
 ### FunctionDef split_text(self, text)
+
 **split_text**: 该函数的功能是对文本进行语义分割。
 
 **参数**:
+
 - text: 需要进行分割的文本，数据类型为字符串（str）。
 
 **代码描述**:
@@ -54,12 +67,15 @@ AliTextSplitter类继承自CharacterTextSplitter类，提供了对文本进行�
 最后，函数将输入文本传递给模型进行分割，并将分割结果（一个包含分割后文本的列表）返回。分割结果是通过将模型输出的文本按`\n\t`分割，并过滤掉空字符串后得到的。
 
 **注意**:
+
 - 使用该函数前，需要确保已经安装了`modelscope[nlp]`包。可以通过执行`pip install "modelscope[nlp]" -f https://modelscope.oss-cn-beijing.aliyuncs.com/releases/repo.html`来安装。
 - 由于使用了基于BERT的模型进行文档分割，对计算资源有一定要求。默认情况下，模型会在CPU上运行，但如果有足够的GPU资源，可以通过修改`device`参数来加速计算。
 
 **输出示例**:
+
 ```python
 ['欢迎使用文档分割功能', '这是第二段文本', '这是第三段文本']
 ```
+
 此输出示例展示了`split_text`函数处理后的结果，其中输入文本被分割成了三段，每段文本作为列表的一个元素返回。
 ***

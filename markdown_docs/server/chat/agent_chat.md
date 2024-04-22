@@ -1,7 +1,9 @@
 ## FunctionDef agent_chat(query, history, stream, model_name, temperature, max_tokens, prompt_name)
+
 **agent_chat**: 该函数用于处理与代理的异步聊天对话。
 
 **参数**:
+
 - `query`: 用户输入的查询字符串，必填参数。
 - `history`: 历史对话列表，每个元素为一个`History`对象。
 - `stream`: 是否以流式输出的方式返回数据，默认为`False`。
@@ -18,19 +20,23 @@
 在非流式输出模式下，函数会收集所有生成的聊天回复，并在最终将它们整合为一个JSON格式的响应体返回。
 
 **注意**:
+
 - 在使用`agent_chat`函数时，需要确保传入的`history`参数格式正确，即每个元素都应为`History`对象或能够转换为`History`对象的数据结构。
 - `stream`参数的设置会影响函数的返回方式，根据实际应用场景选择合适的模式。
 - 函数依赖于配置好的LLM模型和prompt模板，确保在调用前已正确配置这些依赖项。
 
 **输出示例**:
 在非流式输出模式下，假设用户的查询得到了一系列的聊天回复，函数可能返回如下格式的JSON数据：
+
 ```json
 {
   "answer": "这是聊天过程中生成的回复文本。",
   "final_answer": "这是最终的回复文本。"
 }
 ```
+
 在流式输出模式下，函数会逐块返回数据，每块数据可能如下所示：
+
 ```json
 {
   "tools": [
@@ -41,16 +47,21 @@
   ]
 }
 ```
+
 或者在得到最终回复时：
+
 ```json
 {
   "final_answer": "这是最终的回复文本。"
 }
 ```
+
 ### FunctionDef agent_chat_iterator(query, history, model_name, prompt_name)
+
 **agent_chat_iterator**: 此函数的功能是异步迭代生成代理聊天的响应。
 
 **参数**:
+
 - `query`: 字符串类型，用户的查询或输入。
 - `history`: 可选的`List[History]`类型，表示对话历史记录。
 - `model_name`: 字符串类型，默认为`LLM_MODELS`列表中的第一个模型，用于指定使用的语言模型。
@@ -64,8 +75,10 @@
 在异步循环中，函数尝试创建一个任务，使用`wrap_done`函数包装代理执行器的调用，并在完成时通过回调通知。如果设置了`stream`参数，则函数会异步迭代回调处理器的输出，并根据状态生成不同的响应数据，最终以JSON格式产生输出。如果未设置`stream`参数，则会收集所有输出数据，并在最后生成一个包含答案和最终答案的JSON对象。
 
 **注意**:
+
 - 在使用此函数时，需要确保提供的`history`参数格式正确，且每个历史记录项都应为`History`类的实例。
 - `model_name`和`prompt_name`参数应根据实际需要选择合适的模型和提示模板。
 - 函数内部使用了多个异步操作和自定义类，如`CustomAsyncIteratorCallbackHandler`、`CustomPromptTemplate`和`CustomOutputParser`，需要确保这些组件的正确实现和配置。
 - 此函数设计为与前端实现实时或异步的聊天交互，因此在集成到聊天系统时，应考虑其异步特性和对外部回调的处理方式。
+
 ***

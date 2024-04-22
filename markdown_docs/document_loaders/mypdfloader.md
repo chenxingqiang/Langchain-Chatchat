@@ -1,7 +1,9 @@
 ## ClassDef RapidOCRPDFLoader
+
 **RapidOCRPDFLoader**: RapidOCRPDFLoader的功能是从PDF文件中提取文本和图片内容，并通过OCR技术将图片内容转换为文本。
 
 **属性**:
+
 - 无特定公开属性，该类主要通过方法实现功能。
 
 **代码描述**:
@@ -12,12 +14,14 @@ RapidOCRPDFLoader类继承自UnstructuredFileLoader，专门用于处理PDF文�
 该类的使用场景在于需要从PDF文件中提取文本信息，同时也需要处理PDF中的图片内容，尤其是当图片中包含了重要的文本信息时。通过OCR技术，可以将这些图片中的文本信息转换为可读的文本格式，进一步增强文本提取的准确性和完整性。
 
 **注意**:
+
 - 使用RapidOCRPDFLoader类之前，需要确保已经安装了fitz（pyMuPDF）库和OpenCV库，因为这两个库是处理PDF文件和图片旋转的关键。
 - OCR技术的准确性受到图片质量的影响，因此在处理高度压缩或质量较低的图片时，OCR的结果可能不够理想。
 - 该类在处理大型PDF文件时可能会消耗较多的计算资源，因此在资源受限的环境下使用时需要注意。
 
 **输出示例**:
 假设处理一个包含文本和图片的PDF文件，RapidOCRPDFLoader可能会返回如下格式的文本内容：
+
 ```
 第一页文本内容...
 图片1识别的文本内容...
@@ -26,29 +30,37 @@ RapidOCRPDFLoader类继承自UnstructuredFileLoader，专门用于处理PDF文�
 图片3识别的文本内容...
 ...
 ```
+
 这个输出示例展示了RapidOCRPDFLoader如何将PDF文件中的文本和图片内容结合起来，提供一个连续的文本流，便于后续的处理和分析。
+
 ### FunctionDef _get_elements(self)
+
 **_get_elements**: 该函数的功能是从PDF文件中提取文本和图像内容，并对图像进行OCR识别，最后将识别的文本内容进行结构化处理。
 
 **参数**: 此函数没有直接的参数，它通过类的实例访问成员变量。
 
 **代码描述**:
+
 - `_get_elements` 函数首先定义了两个内部函数：`rotate_img` 和 `pdf2text`。
 - `rotate_img` 函数用于旋转图像，接受图像和旋转角度作为参数，返回旋转后的图像。它通过OpenCV库计算旋转矩阵，并应用于输入图像以获得旋转后的图像。
 - `pdf2text` 函数负责将PDF文件的内容转换为文本。它使用`fitz`库（即PyMuPDF）打开PDF文件，遍历每一页，提取文本内容，并使用进度条（`tqdm`库）显示处理进度。对于每个页面上的图像，如果图像的尺寸超过了设定的阈值（`PDF_OCR_THRESHOLD`），则使用OCR（光学字符识别）技术识别图像中的文本。如果页面有旋转，则先对图像进行旋转校正，再进行OCR识别。
 - 在提取完所有页面的文本和图像内容后，`_get_elements` 函数使用`partition_text`函数对提取到的文本进行结构化处理，以便于后续的数据处理和分析。
 
 **注意**:
+
 - 本函数依赖于OpenCV和PyMuPDF库进行图像处理和PDF文件的读取，需要确保这些库已正确安装和配置。
 - OCR识别的准确性受到图像质量的影响，图像的清晰度和旋转校正的准确性对识别结果有重要影响。
 - 函数中使用的`PDF_OCR_THRESHOLD`变量需要根据实际情况进行调整，以优化OCR识别的效果和性能。
 
 **输出示例**:
 由于`_get_elements`函数的输出依赖于输入的PDF文件内容和OCR识别的结果，因此无法提供一个固定的输出示例。通常，该函数会返回一个包含结构化文本内容的列表，列表中的每个元素代表PDF中的一段文本内容，这些内容已经过OCR识别和结构化处理。
+
 #### FunctionDef rotate_img(img, angle)
+
 **rotate_img**: 该函数的功能是旋转图像。
 
 **参数**:
+
 - img: 待旋转的图像。
 - angle: 旋转角度，正值表示逆时针旋转，负值表示顺时针旋转。
 
@@ -58,16 +70,20 @@ RapidOCRPDFLoader类继承自UnstructuredFileLoader，专门用于处理PDF文�
 在项目中，`rotate_img` 函数被 `pdf2text` 函数调用，用于处理PDF文档中的图像。当PDF页面有旋转角度时，`pdf2text` 函数会提取页面中的图像，然后调用 `rotate_img` 函数将图像旋转回正常的方向，以便进行后续的OCR（光学字符识别）处理。这样可以确保OCR处理的准确性，特别是在处理扫描文档和图像密集型PDF文件时。
 
 **注意**:
+
 - 在使用 `cv2.getRotationMatrix2D` 和 `cv2.warpAffine` 方法时，需要确保已经导入了OpenCV库（即cv2）。
 - 旋转图像可能会导致图像边缘的一部分被裁剪。因此，计算新边界并调整平移参数是确保图像完整性的关键步骤。
 
 **输出示例**:
 假设有一个图像 `img` 和旋转角度 `angle=90`，调用 `rotate_img(img, 90)` 后，将返回一个新的图像，其中原始图像已经逆时针旋转了90度。
 ***
+
 #### FunctionDef pdf2text(filepath)
+
 **pdf2text**: 该函数的功能是将PDF文件中的文本和图片内容转换为文本格式。
 
 **参数**:
+
 - filepath: PDF文件的路径。
 
 **代码描述**:
@@ -78,6 +94,7 @@ RapidOCRPDFLoader类继承自UnstructuredFileLoader，专门用于处理PDF文�
 整个过程中，使用`tqdm`库显示处理进度，为用户提供友好的进度反馈。
 
 **注意**:
+
 - 确保安装了`fitz`（也就是`PyMuPDF`）、`numpy`、`tqdm`等库。
 - `PDF_OCR_THRESHOLD`是一个预设的阈值，用于决定哪些图像需要进行OCR处理。该阈值需要根据实际情况进行调整。
 - 函数依赖于`get_ocr`和`rotate_img`两个函数，确保这些依赖函数正确实现并可用。

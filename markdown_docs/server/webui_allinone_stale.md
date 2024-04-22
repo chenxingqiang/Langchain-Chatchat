@@ -1,7 +1,9 @@
 ## FunctionDef launch_api(args, args_list, log_name)
+
 **launch_api**: 此函数的功能是启动API服务。
 
 **参数**:
+
 - args: 包含API启动所需参数的对象，此对象应具备访问如api_host和api_port等属性的能力。
 - args_list: 一个字符串列表，默认值为api_args，指定了需要转换为命令行参数的键名。
 - log_name: 日志文件的名称。如果未提供，则根据API的主机名和端口动态生成。
@@ -17,13 +19,17 @@
 `launch_api` 函数在项目中负责启动API服务的核心功能。它通过调用`string_args`函数来处理命令行参数的转换，这显示了`launch_api`与`string_args`之间的直接依赖关系。`string_args`函数为`launch_api`提供了参数字符串化的能力，使得`launch_api`能够有效地构建用于启动API服务的shell命令。
 
 **注意**:
+
 - 确保传递给`launch_api`函数的`args`对象包含了所有必要的API启动参数，如`api_host`和`api_port`。
 - 如果`log_name`参数未提供，日志文件的命名将依赖于API服务的主机名和端口号，因此请确保这些信息的准确性。
 - 在使用`launch_api`函数时，应确保相关的API启动脚本（`api.py`）存在于预期的路径下，并且能够正确处理通过命令行传递的参数。
+
 ## FunctionDef launch_webui(args, args_list, log_name)
+
 **launch_webui**: 此函数的功能是启动webui服务。
 
 **参数**:
+
 - args: 包含启动webui所需参数的对象。此对象应具备访问各参数值的能力。
 - args_list: 参数列表，默认值为web_args，用于指定哪些参数需要被包含在最终生成的命令行字符串中。
 - log_name: 日志文件的名称。如果未提供，则默认使用LOG_PATH路径下的webui作为日志文件名。
@@ -41,5 +47,6 @@
 `launch_webui` 函数在项目中负责启动webui服务的任务。它依赖于`string_args`函数来处理命令行参数的生成。`string_args`函数根据提供的参数对象和参数列表，生成适用于命令行的参数字符串。这种设计使得`launch_webui`函数能够灵活地处理不同的启动参数，同时保持命令行参数生成逻辑的集中和一致性。
 
 **注意**:
+
 - 确保传递给`launch_webui`函数的`args`对象中包含了所有必要的参数，特别是`nohup`参数，因为它决定了webui服务是以前台模式还是后台模式运行。
 - 如果在后台模式下运行webui服务，务必检查指定的日志文件，以便于排查可能出现的启动异常。

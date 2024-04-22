@@ -1,7 +1,9 @@
 ## ClassDef ConversationModel
+
 **ConversationModel**: ConversationModel类的功能是定义一个聊天记录模型，用于数据库中存储聊天会话的详细信息。
 
 **属性**:
+
 - `id`: 对话框ID，是每个对话框的唯一标识符，使用String类型。
 - `name`: 对话框名称，存储对话框的名称，使用String类型。
 - `chat_type`: 聊天类型，标识聊天的类型（如普通聊天、客服聊天等），使用String类型。
@@ -13,22 +15,27 @@ ConversationModel类继承自Base类，是一个ORM模型，用于映射数据�
 在项目中，ConversationModel类被用于创建和管理聊天记录的数据。例如，在`server/db/repository/conversation_repository.py`中的`add_conversation_to_db`函数中，通过创建ConversationModel的实例并将其添加到数据库会话中，实现了聊天记录的新增功能。这显示了ConversationModel类在项目中用于处理聊天记录数据的重要角色。
 
 **注意**:
+
 - 在使用ConversationModel进行数据库操作时，需要确保传入的参数类型与字段定义相匹配，避免类型不匹配的错误。
 - 创建ConversationModel实例时，`id`字段可以不传入，由数据库自动生成唯一标识符，但在`add_conversation_to_db`函数中，如果没有提供`conversation_id`，则会使用`uuid.uuid4().hex`生成一个。
 
 **输出示例**:
 假设创建了一个ConversationModel实例，其属性值如下：
+
 - id: "1234567890abcdef"
 - name: "客服对话"
 - chat_type: "agent_chat"
 - create_time: "2023-04-01 12:00:00"
 
 则该实例的`__repr__`方法输出可能如下：
+
 ```
 <Conversation(id='1234567890abcdef', name='客服对话', chat_type='agent_chat', create_time='2023-04-01 12:00:00')>
 ```
-### FunctionDef __repr__(self)
-**__repr__**: 该函数的功能是生成并返回一个代表会话对象的字符串。
+
+### FunctionDef **repr**(self)
+
+****repr****: 该函数的功能是生成并返回一个代表会话对象的字符串。
 
 **参数**: 此函数不接受任何外部参数。
 

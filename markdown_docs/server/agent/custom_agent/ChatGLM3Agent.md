@@ -1,7 +1,9 @@
 ## ClassDef StructuredChatOutputParserWithRetries
+
 **StructuredChatOutputParserWithRetries**: 该类的功能是为结构化聊天代理提供带有重试机制的输出解析。
 
 **属性**:
+
 - base_parser: 使用的基础解析器。
 - output_fixing_parser: 使用的输出修正解析器，可选。
 
@@ -13,17 +15,21 @@ StructuredChatOutputParserWithRetries 类继承自 AgentOutputParser，主要用
 在项目中，StructuredChatOutputParserWithRetries 被 StructuredGLM3ChatAgent 类作为默认的输出解析器使用。通过 StructuredGLM3ChatAgent 类的 _get_default_output_parser 方法，可以看出 StructuredChatOutputParserWithRetries 被用于构建结构化聊天代理，以处理语言模型（LLM）的输出并将其转换为适合代理处理的格式。
 
 **注意**:
+
 - 在使用 StructuredChatOutputParserWithRetries 类时，需要确保传入的文本格式符合预期，特别是当涉及到特殊标记和工具调用格式时。
 - 如果提供了 output_fixing_parser，它将用于在基础解析失败或需要修正时进行二次解析。
 
 **输出示例**:
+
 ```json
 Action:
 ```
+
 {
   "action": "Final Answer",
   "action_input": "这是解析后的文本"
 }
+
 ```
 在这个示例中，假设传入的文本不包含 "tool_call"，则 parse 方法将直接将文本视为最终答案，并构建相应的 JSON 字符串作为输出。
 ### FunctionDef parse(self, text)
@@ -56,15 +62,20 @@ Action:
   }
 }
 ```
+
 如果文本内容为最终答案，解析后可能的返回值为：
+
 ```json
 {
   "action": "Final Answer",
   "action_input": "这是一个最终答案的示例文本。"
 }
 ```
+
 ***
+
 ### FunctionDef _type(self)
+
 **_type**: 该函数的功能是返回一个特定的字符串。
 
 **参数**: 此函数没有参数。
@@ -74,14 +85,19 @@ Action:
 **注意**: 使用此函数时，需要注意它返回的字符串是硬编码的，这意味着如果未来需要更改类型标识，将需要直接修改此函数的返回值。因此，维护此部分代码时应谨慎，确保任何更改都不会影响依赖此标识的其他代码逻辑。
 
 **输出示例**: 调用 `_type` 函数将返回以下字符串：
+
 ```
 "structured_chat_ChatGLM3_6b_with_retries"
 ```
+
 ***
+
 ## ClassDef StructuredGLM3ChatAgent
+
 **StructuredGLM3ChatAgent**: 该类的功能是实现一个结构化的聊天代理，用于处理和响应基于ChatGLM3-6B模型的对话。
 
 **属性**:
+
 - output_parser: 用于解析代理输出的解析器，默认为StructuredChatOutputParserWithRetries实例。
 - observation_prefix: 用于在ChatGLM3-6B观察结果前添加的前缀字符串。
 - llm_prefix: 用于在语言模型调用前添加的前缀字符串。
@@ -100,20 +116,25 @@ StructuredGLM3ChatAgent 类继承自 Agent 类，提供了结构化聊天代理�
   - `from_llm_and_tools` 类方法用于根据语言模型和工具集合构建一个StructuredGLM3ChatAgent实例，它通过组合语言模型、工具和其他参数来初始化代理。
 
 **注意**:
+
 - 在使用 StructuredGLM3ChatAgent 类时，需要确保提供的工具和语言模型与代理的目标任务相匹配。
 - 输出解析器（output_parser）应该能够准确解析语言模型的输出，以便代理能够正确响应用户的输入。
 - 在构建提示时，应注意格式化字符串模板，确保它们能够正确地被语言模型理解和处理。
 
 **输出示例**:
 假设代理接收到的输入是一个简单的问答任务，输出示例可能如下：
+
 ```
 {
   "action": "Final Answer",
   "action_input": "这是代理基于语言模型输出解析后的回答"
 }
 ```
+
 在这个示例中，代理通过解析语言模型的输出，生成了一个包含最终回答的动作（Action）和相应输入（action_input）的JSON对象。
+
 ### FunctionDef observation_prefix(self)
+
 **observation_prefix**: 此函数的功能是生成并返回ChatGLM3-6B观察的前缀字符串。
 
 **参数**: 此函数不接受任何参数。
@@ -123,11 +144,15 @@ StructuredGLM3ChatAgent 类继承自 Agent 类，提供了结构化聊天代理�
 **注意**: 使用此函数时，需要注意它返回的前缀字符串是固定的。如果在不同的上下文或应用中需要不同的前缀，可能需要对此函数进行相应的修改或扩展。
 
 **输出示例**: 调用`observation_prefix`函数将返回以下字符串：
+
 ```
 Observation:
 ```
+
 ***
+
 ### FunctionDef llm_prefix(self)
+
 **llm_prefix函数功能**: 该函数的功能是生成并返回一个用于在调用大型语言模型(llm)时附加的前缀字符串。
 
 **参数**: 该函数没有参数。
@@ -140,10 +165,13 @@ Observation:
 
 通过上述分析，开发者和初学者可以了解到`llm_prefix`函数的作用、使用方法以及需要注意的事项。这有助于在使用`StructuredGLM3ChatAgent`类与大型语言模型进行交互时，能够更有效地引导模型的回应，从而提高交互的质量和效果。
 ***
+
 ### FunctionDef _construct_scratchpad(self, intermediate_steps)
+
 **_construct_scratchpad**: 此函数的功能是构建并返回一个代表中间步骤的字符串。
 
 **参数**:
+
 - **intermediate_steps**: 一个列表，包含元组，每个元组由AgentAction和字符串组成，代表中间的操作步骤。
 
 **代码描述**:
@@ -152,6 +180,7 @@ Observation:
 如果 `agent_scratchpad` 非空，函数将返回一个格式化的字符串，该字符串以一种友好的方式向用户展示之前的工作成果，即使实际上这个函数并没有直接访问到这些成果，只是通过参数传递得到的信息。如果 `agent_scratchpad` 为空，则直接返回该空字符串。
 
 **注意**:
+
 - 确保传入的 `intermediate_steps` 参数格式正确，即列表中包含的元素为元组，且元组包含的是 `AgentAction` 和字符串。
 - 此函数假设父类的 `_construct_scratchpad` 方法已正确实现并能返回一个字符串。如果父类方法的实现发生变化，可能需要相应地调整此函数。
 
@@ -162,11 +191,15 @@ Observation:
 "This was your previous work (but I haven't seen any of it! I only see what you return as final answer):
 Step 1: Do something; Step 2: Do something else;"
 ```
+
 ***
+
 ### FunctionDef _get_default_output_parser(cls, llm)
+
 **_get_default_output_parser**: 该函数的功能是获取默认的输出解析器。
 
 **参数**:
+
 - `llm`: 可选参数，类型为 `BaseLanguageModel`，表示基础语言模型。
 - `**kwargs`: 接受任意数量的关键字参数。
 
@@ -175,12 +208,15 @@ Step 1: Do something; Step 2: Do something else;"
 在项目中，`_get_default_output_parser` 方法被 `from_llm_and_tools` 方法调用，以获取默认的输出解析器实例。如果在创建 `StructuredGLM3ChatAgent` 实例时没有明确指定输出解析器，则会通过调用 `_get_default_output_parser` 方法来获取默认的输出解析器实例，并将其用于处理语言模型的输出。
 
 **注意**:
+
 - 在使用 `_get_default_output_parser` 方法时，需要确保传入的 `llm` 参数（如果有）是一个有效的语言模型实例。
 - 该方法设计为灵活接受任意数量的关键字参数 `**kwargs`，但在当前实现中并未直接使用这些额外的参数。开发者在扩展或修改方法时可以根据需要利用这些参数。
 
 **输出示例**: 由于 `_get_default_output_parser` 方法返回的是一个 `StructuredChatOutputParserWithRetries` 实例，因此输出示例将依赖于该实例的具体实现。假设 `llm` 参数为 `None`，调用 `_get_default_output_parser` 方法将返回一个不带语言模型实例的 `StructuredChatOutputParserWithRetries` 实例。
 ***
+
 ### FunctionDef _stop(self)
+
 **_stop函数的功能**: `_stop`函数的目的是结束当前的会话并返回一个特定的标记列表。
 
 **参数**: 此函数没有参数。
@@ -190,15 +226,20 @@ Step 1: Do something; Step 2: Do something else;"
 **注意**: 虽然`_stop`函数的实现看起来简单，但它在聊天代理的逻辑中可能扮演着关键角色。使用时需要确保聊天模型或处理逻辑能够正确识别并处理返回的`"<|observation|>"`标记。此外，由于`_stop`是一个私有方法，它仅在`StructuredGLM3ChatAgent`类的内部被调用，不应该直接从类的实例外部访问或调用。
 
 **输出示例**: 调用`_stop`函数可能会返回如下列表：
+
 ```python
 ["<|observation|>"]
 ```
+
 这个列表包含一个字符串元素，即`"<|observation|>"`，用于表示聊天会话的结束或需要进行观察的状态。
 ***
+
 ### FunctionDef create_prompt(cls, tools, prompt, input_variables, memory_prompts)
+
 **create_prompt**: 此函数的功能是基于提供的工具和模板参数构建聊天提示模板。
 
 **参数**:
+
 - `tools`: 一个实现了BaseTool接口的对象序列，代表聊天代理可以使用的工具。
 - `prompt`: 一个字符串模板，用于格式化最终的提示信息。
 - `input_variables`: 一个字符串列表，指定输入变量的名称，默认为None。
@@ -214,6 +255,7 @@ Step 1: Do something; Step 2: Do something else;"
 在项目中，`create_prompt`函数被`from_llm_and_tools`方法调用，用于根据语言模型（LLM）和工具集合构建一个聊天代理。这表明`create_prompt`函数在构建聊天代理的初始化过程中起着核心作用，特别是在准备聊天代理的提示模板方面。
 
 **注意**:
+
 - 确保`prompt`参数提供的模板字符串正确地使用了所有预期的变量，以避免格式化时出现错误。
 - `tools`参数中的工具对象需要实现`BaseTool`接口，确保它们具有`name`、`description`和`args_schema`属性。
 
@@ -226,11 +268,15 @@ Calculator: A simple calculator, args: {'number1': 'Number', 'number2': 'Number'
 Translator: Translates text from one language to another, args: {'text': 'String', 'target_language': 'String'}
 Input: {input}
 ```
+
 ***
+
 ### FunctionDef from_llm_and_tools(cls, llm, tools, prompt, callback_manager, output_parser, human_message_template, input_variables, memory_prompts)
+
 **from_llm_and_tools**: 该函数的功能是从语言模型(LLM)和工具集合构建一个聊天代理。
 
 **参数**:
+
 - `cls`: 类方法的第一个参数，指代当前类。
 - `llm`: `BaseLanguageModel`的实例，表示基础语言模型。
 - `tools`: 实现了`BaseTool`接口的对象序列，代表聊天代理可以使用的工具。
@@ -246,6 +292,7 @@ Input: {input}
 `from_llm_and_tools`函数首先验证提供的工具集合是否有效。然后，它调用`create_prompt`方法来创建聊天提示模板，该模板基于提供的工具、提示、输入变量和记忆提示。接着，使用`llm`、生成的`prompt`和`callback_manager`创建一个`LLMChain`实例。此外，函数从工具集合中提取工具名称，并尝试获取默认的输出解析器，如果未提供`output_parser`参数，则调用`_get_default_output_parser`方法获取默认解析器。最后，使用这些组件构建并返回一个`StructuredGLM3ChatAgent`实例。
 
 **注意**:
+
 - 确保提供的`llm`和`tools`参数是有效的实例，且`tools`中的每个工具都实现了`BaseTool`接口。
 - 如果在调用时未指定`output_parser`，则会自动使用默认的输出解析器。
 - `**kwargs`参数提供了额外的灵活性，允许在创建代理时传递额外的配置选项。
@@ -253,7 +300,9 @@ Input: {input}
 **输出示例**:
 由于`from_llm_and_tools`函数返回的是一个`StructuredGLM3ChatAgent`实例，因此输出示例将依赖于该实例的具体实现。例如，如果使用默认参数调用此函数，将返回一个配置了基础语言模型、指定工具集合和默认输出解析器的`StructuredGLM3ChatAgent`实例。这个实例可以直接用于处理聊天对话，执行工具命令，并解析语言模型的输出。
 ***
+
 ### FunctionDef _agent_type(self)
+
 **_agent_type**: 该函数的功能是抛出一个 ValueError 异常。
 
 **参数**: 此函数不接受任何参数。
@@ -262,10 +311,13 @@ Input: {input}
 
 **注意**: 在使用 `StructuredGLM3ChatAgent` 类或其任何子类时，开发者需要确保 `_agent_type` 方法被正确重写以避免运行时错误。此方法的存在强调了一个设计原则，即某些方法是专门设计给子类来实现的，而不是直接在父类中使用。因此，如果你在开发过程中遇到了 `ValueError`，这可能是因为你尝试调用了一个应该被子类重写的方法，但是没有这样做。
 ***
+
 ## FunctionDef initialize_glm3_agent(tools, llm, prompt, memory, agent_kwargs)
+
 **initialize_glm3_agent**: 该函数的功能是初始化一个基于GLM3模型的聊天代理。
 
 **参数**:
+
 - `tools`: 实现了`BaseTool`接口的对象序列，代表聊天代理可以使用的工具。
 - `llm`: `BaseLanguageModel`的实例，表示基础语言模型。
 - `prompt`: 字符串类型，用于格式化最终的提示信息，默认为None。
@@ -278,6 +330,7 @@ Input: {input}
 `initialize_glm3_agent`函数首先检查是否提供了`tags`参数，并将其转换为列表形式。然后，检查`agent_kwargs`参数是否为None，如果是，则将其初始化为空字典。接下来，使用`StructuredGLM3ChatAgent.from_llm_and_tools`类方法创建一个`StructuredGLM3ChatAgent`实例，该实例基于提供的语言模型、工具集合、提示信息以及`agent_kwargs`中的其他参数。最后，使用`AgentExecutor.from_agent_and_tools`方法创建并返回一个`AgentExecutor`实例，该实例包含了刚刚创建的聊天代理、工具集合、聊天历史以及标签。
 
 **注意**:
+
 - 在使用`initialize_glm3_agent`函数时，确保提供的`tools`和`llm`参数是有效的实例，且`tools`中的每个工具都实现了`BaseTool`接口。
 - `prompt`参数允许自定义聊天代理的提示信息，可以根据需要提供。
 - `memory`参数用于存储和管理聊天历史，有助于实现更连贯的对话。
@@ -285,6 +338,7 @@ Input: {input}
 
 **输出示例**:
 假设调用`initialize_glm3_agent`函数并提供了必要的参数，可能会返回如下的`AgentExecutor`实例：
+
 ```
 AgentExecutor(
     agent=StructuredGLM3ChatAgent(...),
@@ -293,4 +347,5 @@ AgentExecutor(
     tags=['example_tag']
 )
 ```
+
 在这个示例中，`AgentExecutor`实例包含了一个配置好的`StructuredGLM3ChatAgent`聊天代理，以及相关的工具集合、聊天历史和标签。这个实例可以直接用于处理聊天对话，执行工具命令，并解析语言模型的输出。

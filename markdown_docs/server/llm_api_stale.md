@@ -1,7 +1,9 @@
 ## FunctionDef string_args(args, args_list)
+
 **string_args**: 此函数的功能是将参数对象中的键值对转换成字符串格式，以便在命令行中使用。
 
 **参数**:
+
 - args: 包含参数的对象，此对象应具备一个名为 `_get_kwargs` 的方法，该方法返回对象中所有键值对的迭代器。
 - args_list: 一个字符串列表，指定需要转换为字符串的参数键名。
 
@@ -20,18 +22,23 @@
 `string_args` 函数在项目中被多个地方调用，包括 `launch_worker`、`launch_all`、`launch_api` 和 `launch_webui` 函数。这些调用点传递不同的参数对象和参数列表给 `string_args` 函数，以生成特定上下文中所需的命令行参数字符串。这表明 `string_args` 函数在项目中扮演着构建命令行参数字符串的核心角色，为启动不同的服务组件提供支持。
 
 **注意**:
+
 - 确保传递给 `string_args` 函数的 `args` 对象具有 `_get_kwargs` 方法。
 - 在使用 `string_args` 函数时，应仔细定义 `args_list`，确保只包含需要转换为命令行参数的键名。
 
 **输出示例**:
 假设 `args` 对象包含 `{ 'model_path': 'path/to/model', 'worker_host': 'localhost', 'worker_port': 8080, 'use_ssl': True }`，且 `args_list` 为 `['model-path', 'worker-host', 'worker-port', 'use-ssl']`，则 `string_args` 函数的输出可能为：
+
 ```
 --model path/to/model --host localhost --port 8080 --ssl 
 ```
+
 ## FunctionDef launch_worker(item, args, worker_args)
+
 **launch_worker**: 此函数的功能是启动一个工作进程。
 
 **参数**:
+
 - item: 一个字符串，包含模型路径、工作进程主机和端口的组合，格式为"model-path@worker-host@worker-port"。
 - args: 一个对象，包含了启动工作进程所需的各种参数。
 - worker_args: 一个列表，指定了需要转换为字符串的工作进程参数键名。
@@ -42,15 +49,19 @@
 函数随后调用 `string_args` 函数，将 `args` 和 `worker_args` 转换为字符串格式的命令行参数。这些参数将用于构建启动工作进程的 shell 命令。`base_launch_sh` 和 `base_check_sh` 是两个格式化字符串，分别用于生成启动和检查工作进程的 shell 命令。这些命令通过 `subprocess.run` 函数执行，以实际启动和检查工作进程。
 
 **注意**:
+
 - 确保 `item` 参数的格式正确，即包含模型路径、工作进程主机和端口，且以 "@" 分隔。
 - `args` 对象应包含所有必要的参数，并且应具有 `_get_kwargs` 方法，以便 `string_args` 函数能够正确处理。
 - `worker_args` 应为一个列表，包含了需要转换为命令行参数的键名。
 - 此函数依赖于外部定义的 `base_launch_sh` 和 `base_check_sh` 格式化字符串，以及 `LOG_PATH` 常量，确保这些依赖在调用函数前已正确定义和初始化。
 - 使用此函数时，应注意检查相关日志文件，以便在出现问题时能够迅速定位和解决。
+
 ## FunctionDef launch_all(args, controller_args, worker_args, server_args)
+
 **launch_all**: 此函数的功能是启动整个LLM服务，包括控制器、工作进程和服务器。
 
 **参数**:
+
 - args: 包含启动服务所需的各种参数的对象。
 - controller_args: 控制器启动所需的参数列表。
 - worker_args: 工作进程启动所需的参数列表。
@@ -64,6 +75,7 @@
 最后，函数同样使用 `string_args` 函数将 `args` 对象和 `server_args` 列表转换为字符串格式的命令行参数，用于构建启动服务器的 shell 命令。这些命令通过 `subprocess.run` 函数执行，以实际启动服务器并检查其运行状态。函数结束时，打印消息提示LLM服务启动完毕。
 
 **注意**:
+
 - 确保传递给 `launch_all` 函数的 `args` 对象包含所有必要的参数，并且这些参数正确无误。
 - `controller_args`、`worker_args` 和 `server_args` 列表应仔细配置，确保包含启动相应组件所需的所有参数键名。
 - `launch_worker` 函数的调用依赖于 `args.model_path_address` 的格式和内容，如果有多个模型路径，请确保它是一个列表或元组。

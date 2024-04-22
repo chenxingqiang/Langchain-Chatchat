@@ -1,7 +1,9 @@
 ## ClassDef Ws_Param
+
 **Ws_Param**: Ws_Param 类的功能是生成用于连接 Spark 服务的 URL。
 
 **属性**:
+
 - `APPID`: 应用程序的ID。
 - `APIKey`: 用于访问Spark服务的API密钥。
 - `APISecret`: 用于访问Spark服务的API密钥的秘密。
@@ -15,19 +17,25 @@ Ws_Param 类通过初始化时传入的参数（APPID、APIKey、APISecret、Spa
 在项目中，`Ws_Param`类被`xinghuo.py`中的`request`函数调用，用于建立与Spark服务的WebSocket连接。`request`函数首先创建`Ws_Param`对象，通过调用其`create_url`方法获取鉴权后的URL，然后使用这个URL建立WebSocket连接，并发送请求数据。
 
 **注意**:
+
 - 确保传入`__init__`方法的`Spark_url`格式正确，因为它会被解析为`host`和`path`。
 - 生成的URL包含敏感信息（如APIKey和APISecret），因此在日志或调试信息中打印URL时需要谨慎。
 
 **输出示例**:
 生成的URL可能看起来像这样：
+
 ```
 https://spark.example.com/api?authorization=Base64EncodedString&date=RFC1123Date&host=spark.example.com
 ```
+
 这个URL包含了所有必要的鉴权信息，可以直接用于建立与Spark服务的连接。
-### FunctionDef __init__(self, APPID, APIKey, APISecret, Spark_url)
-**__init__**: 该函数用于初始化Ws_Param类的实例。
+
+### FunctionDef **init**(self, APPID, APIKey, APISecret, Spark_url)
+
+****init****: 该函数用于初始化Ws_Param类的实例。
 
 **参数**:
+
 - `APPID`: 应用程序的ID。
 - `APIKey`: 用于访问Spark API的API密钥。
 - `APISecret`: 用于访问Spark API的API密钥的秘密。
@@ -41,11 +49,15 @@ https://spark.example.com/api?authorization=Base64EncodedString&date=RFC1123Date
 接着，函数使用`urlparse`函数（来自Python标准库中的`urllib.parse`模块）解析`Spark_url`参数。`urlparse`函数会返回一个解析结果对象，该对象包含了URL的不同组成部分。本函数中，特别使用了该对象的`netloc`和`path`属性来获取URL的网络位置（即主机名加端口号）和路径，分别赋值给实例变量`self.host`和`self.path`。这样的设计使得在需要与Spark服务进行通信时，可以方便地构造请求。
 
 **注意**:
+
 - 在使用`Ws_Param`类之前，确保提供的`Spark_url`是有效的，并且可以解析为正确的网络位置和路径。
 - `APPID`、`APIKey`和`APISecret`需要从Spark服务的管理界面获取，确保这些信息的准确性和安全性。
 - 本函数不对传入的参数值进行有效性验证，调用者需要确保提供的参数值是合法且适用于目标Spark服务的。
+
 ***
+
 ### FunctionDef create_url(self)
+
 **create_url**: 此函数的功能是生成用于WebSockets连接的URL，包含鉴权信息。
 
 **参数**: 此函数不接受任何外部参数，但使用了对象内部的多个属性，包括`self.host`、`self.path`、`self.APISecret`、`self.APIKey`以及`self.Spark_url`。
@@ -57,15 +69,20 @@ https://spark.example.com/api?authorization=Base64EncodedString&date=RFC1123Date
 **注意**: 使用此函数时，需要确保`Ws_Param`对象已经被正确初始化，包括API密钥、API秘密、主机地址等信息。此外，生成的URL中包含的鉴权信息是基于当前时间的，因此生成的URL应立即使用，避免因时间差导致鉴权失败。
 
 **输出示例**: 假设`self.Spark_url`为`"https://api.example.com/connect"`，`self.host`为`"api.example.com"`，生成的URL可能如下所示：
+
 ```
 "https://api.example.com/connect?authorization=dGhpcyBpcyBhIGZha2UgYXV0aG9yaXphdGlvbiBzdHJpbmc%3D&date=Mon%2C%2020%20Sep%202023%2012%3A00%3A00%20GMT&host=api.example.com"
 ```
+
 此URL包含了编码后的鉴权信息、日期和主机地址，可用于建立安全的WebSocket连接。
 ***
+
 ## FunctionDef gen_params(appid, domain, question, temperature, max_token)
+
 **gen_params**: 该函数用于根据appid和用户的提问来生成请求参数。
 
 **参数**:
+
 - **appid**: 应用程序的唯一标识符。
 - **domain**: 请求的领域或类别。
 - **question**: 用户的提问内容。
@@ -78,11 +95,13 @@ https://spark.example.com/api?authorization=Base64EncodedString&date=RFC1123Date
 在项目中，`gen_params` 函数被`xinghuo.py`中的`request`函数调用。在`request`函数中，首先通过`SparkApi.Ws_Param`创建了一个WebSocket URL，然后调用`gen_params`函数生成请求参数，最后通过WebSocket连接发送这些参数，并处理返回的数据。这表明`gen_params`函数是与Spark API进行交互的关键一环，它负责生成符合API要求的请求数据。
 
 **注意**:
+
 - 确保传入的`appid`、`domain`、`question`、`temperature`和`max_token`参数值正确，因为这些直接影响到请求的成功与否以及返回的结果。
 - `temperature`参数控制生成文本的创造性，较高的值会导致更多样化的回答，而较低的值则使回答更加确定性。
 - `max_token`参数限制了生成回答的长度，需要根据实际需求调整。
 
 **输出示例**:
+
 ```json
 {
   "header": {
@@ -105,4 +124,5 @@ https://spark.example.com/api?authorization=Base64EncodedString&date=RFC1123Date
   }
 }
 ```
+
 此输出示例展示了一个典型的请求数据结构，其中包含了应用ID、领域、问题文本以及控制生成回答行为的参数。

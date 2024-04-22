@@ -1,7 +1,9 @@
 ## ClassDef History
+
 **History**: History 类用于表示对话历史记录。
 
 **属性**:
+
 - `role`: 表示发言角色，类型为字符串。
 - `content`: 表示发言内容，类型为字符串。
 
@@ -11,30 +13,41 @@ History 类继承自 BaseModel，用于封装对话中的单条历史记录，�
 在项目中，History 类被广泛用于处理和存储对话历史记录。例如，在 `agent_chat` 和 `chat` 等功能中，通过将用户输入和历史对话记录作为参数传递给模型，以生成相应的回复。这些历史记录通过 History 类的实例来管理和传递，确保了数据的一致性和易用性。
 
 **注意**:
+
 - 在使用 `to_msg_tuple` 方法时，如果 `role` 属性为 "assistant"，则返回的元组中角色部分为 "ai"，否则为 "human"，这有助于在处理对话时区分用户和助手的发言。
 - `to_msg_template` 方法支持根据是否需要原始内容（`is_raw` 参数）来调整内容的格式，这在需要对内容进行特定格式处理时非常有用。
 - `from_data` 类方法提供了灵活的数据转换功能，允许从多种数据源创建 History 实例，增加了代码的通用性和灵活性。
 
 **输出示例**:
 假设有以下历史记录数据：
+
 ```python
 data = {"role": "user", "content": "你好"}
 ```
+
 使用 History 类创建实例并转换为消息元组：
+
 ```python
 h = History.from_data(data)
 print(h.to_msg_tuple())
 ```
+
 可能的输出为：
+
 ```
 ('human', '你好')
 ```
+
 转换为消息模板时，假设不需要原始内容处理：
+
 ```python
 print(h.to_msg_template(is_raw=False))
 ```
+
 输出将根据实际的模板格式化内容，其中角色和内容将被相应地替换和处理。
+
 ### FunctionDef to_msg_tuple(self)
+
 **to_msg_tuple**: 此函数的功能是将消息对象转换为一个包含角色和内容的元组。
 
 **参数**: 此函数没有显式参数，但隐式使用了self参数，代表调用此函数的History对象实例。
@@ -57,10 +70,13 @@ print(h.to_msg_template(is_raw=False))
 
 这种方式使得消息的角色和内容可以被快速地识别和使用，对于消息处理和展示非常有用。
 ***
+
 ### FunctionDef to_msg_template(self, is_raw)
+
 **to_msg_template**: 该函数的功能是将历史消息转换为特定的消息模板格式。
 
 **参数**:
+
 - `is_raw`: 布尔值，指示是否将消息内容作为原始文本处理。默认为True。
 
 **代码描述**:
@@ -73,19 +89,25 @@ print(h.to_msg_template(is_raw=False))
 在项目中，`to_msg_template`方法被多个异步迭代器函数调用，这些函数负责处理不同类型的聊天会话，如`chat_iterator`、`knowledge_base_chat_iterator`和`search_engine_chat_iterator`等。在这些函数中，`to_msg_template`方法用于将历史消息或用户输入转换为适合模型处理的格式，进而生成聊天提示或查询模板。
 
 **注意**:
+
 - 当使用`to_msg_template`方法时，需要注意`is_raw`参数的使用场景。如果消息内容中包含需要保留的模板标签，则应将`is_raw`设置为True。
 - 该方法依赖于`ChatMessagePromptTemplate.from_template`方法，因此需要确保`ChatMessagePromptTemplate`类及其方法的正确实现。
 
 **输出示例**:
 假设有一个`History`对象，其`role`为"human"，`content`为"Hello, AI!"，调用`to_msg_template(False)`可能会返回如下`ChatMessagePromptTemplate`对象：
+
 ```python
 ChatMessagePromptTemplate(content="Hello, AI!", template_type="jinja2", role="user")
 ```
+
 ***
+
 ### FunctionDef from_data(cls, h)
+
 **from_data**: 该函数用于根据提供的数据创建一个History对象。
 
 **参数**:
+
 - `h`: 可以是列表、元组或字典类型，用于初始化History对象的数据。
 
 **代码描述**:
@@ -94,6 +116,7 @@ ChatMessagePromptTemplate(content="Hello, AI!", template_type="jinja2", role="us
 在项目中，`from_data`函数被多个地方调用，用于将用户的输入或历史对话数据转换为History对象，以便后续处理。例如，在`agent_chat`、`chat_iterator`、`file_chat`、`knowledge_base_chat`和`search_engine_chat`等函数中，都可以看到`from_data`函数的调用，它们通过这个函数将传入的历史对话列表转换为History对象列表，以便进行进一步的处理和分析。
 
 **注意**:
+
 - 当输入参数`h`为列表或元组时，至少需要包含两个元素，分别代表角色和内容，否则无法正确创建History对象。
 - 当输入参数`h`为字典时，需要确保字典中包含的键与History类的构造函数参数相匹配，以便正确初始化对象。
 

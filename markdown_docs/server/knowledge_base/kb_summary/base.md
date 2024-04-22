@@ -1,7 +1,9 @@
 ## ClassDef KBSummaryService
+
 **KBSummaryService**: KBSummaryService类的功能是管理和操作知识库摘要的生成、添加和删除。
 
 **属性**:
+
 - `kb_name`: 知识库的名称。
 - `embed_model`: 嵌入模型的名称。
 - `vs_path`: 向量存储的路径。
@@ -20,15 +22,19 @@ KBSummaryService类是一个抽象基类（ABC），用于定义操作知识库�
 在项目中，`KBSummaryService`类被用于处理知识库摘要的生成和管理。例如，在`recreate_summary_vector_store`和`summary_file_to_vector_store`的场景中，通过`KBSummaryService`类的实例来重新创建或更新知识库的摘要信息。这涉及到从知识库中读取文档，生成摘要，然后将这些摘要添加到向量存储和数据库中。
 
 **注意**:
+
 - 在使用`KBSummaryService`类之前，确保已经正确设置了知识库的路径和嵌入模型。
 - 在调用`add_kb_summary`方法之前，应确保摘要信息已经准备好，并且向量存储已经创建。
 
 **输出示例**:
 由于`KBSummaryService`类的方法主要进行数据处理和存储操作，它们的输出通常不直接返回给用户，而是通过日志记录或数据库状态反映操作结果。例如，当成功添加知识库摘要时，可能会在日志中记录相应的信息，如“知识库'example_kb'的摘要添加成功”。
-### FunctionDef __init__(self, knowledge_base_name, embed_model)
-**__init__**: 此函数的功能是初始化KBSummaryService类的实例。
+
+### FunctionDef **init**(self, knowledge_base_name, embed_model)
+
+****init****: 此函数的功能是初始化KBSummaryService类的实例。
 
 **参数**:
+
 - knowledge_base_name: 知识库的名称，类型为字符串。
 - embed_model: 嵌入模型的名称，默认值为EMBEDDING_MODEL，类型为字符串。
 
@@ -40,7 +46,9 @@ KBSummaryService类是一个抽象基类（ABC），用于定义操作知识库�
 
 **注意**: 在使用 `__init__` 方法初始化 `KBSummaryService` 类的实例时，需要确保传入的 `knowledge_base_name` 是有效的，且对应的知识库在文件系统中存在。此外，考虑到不同操作系统的路径表示可能有所不同，`get_kb_path` 和 `get_vs_path` 方法内部使用了 `os.path.join` 来构造路径，以确保路径的正确性和兼容性。
 ***
+
 ### FunctionDef get_vs_path(self)
+
 **get_vs_path**: 此函数的功能是获取向量存储的完整路径。
 
 **参数**: 此函数没有参数。
@@ -51,7 +59,9 @@ KBSummaryService类是一个抽象基类（ABC），用于定义操作知识库�
 
 **输出示例**: 假设 `get_kb_path` 方法返回的路径为 "/data/knowledge_bases/tech_docs"，那么此函数的返回值将会是 "/data/knowledge_bases/tech_docs/summary_vector_store"。这意味着向量存储将位于知识库 "tech_docs" 下的 "summary_vector_store" 目录中。
 ***
+
 ### FunctionDef get_kb_path(self)
+
 **get_kb_path**: 此函数的功能是获取知识库的完整路径。
 
 **参数**: 此函数没有参数。
@@ -64,7 +74,9 @@ KBSummaryService类是一个抽象基类（ABC），用于定义操作知识库�
 
 **输出示例**: 假设 `KB_ROOT_PATH` 为 "/data/knowledge_bases"，且 `self.kb_name` 为 "tech_docs"，那么此函数的返回值将会是 "/data/knowledge_bases/tech_docs"。
 ***
+
 ### FunctionDef load_vector_store(self)
+
 **load_vector_store**: 此函数的功能是加载一个线程安全的FAISS向量库实例。
 
 **参数**: 此函数没有显式参数，但它依赖于`KBSummaryService`类的实例属性。
@@ -78,10 +90,13 @@ KBSummaryService类是一个抽象基类（ABC），用于定义操作知识库�
 
 此函数在项目中的调用情况包括在`add_kb_summary`方法中，用于获取向量库实例以添加文档并将其保存到本地路径。这表明`load_vector_store`函数是知识库摘要服务中管理和操作FAISS向量库的关键组成部分，支持知识库摘要的添加和存储过程。
 ***
+
 ### FunctionDef add_kb_summary(self, summary_combine_docs)
+
 **add_kb_summary**: 此函数的功能是将文档摘要添加到向量存储并更新数据库。
 
 **参数**:
+
 - `summary_combine_docs`: `List[Document]`类型，包含需要添加到向量存储和数据库中的文档摘要信息。
 
 **代码描述**:
@@ -92,6 +107,7 @@ KBSummaryService类是一个抽象基类（ABC），用于定义操作知识库�
 最后，`add_kb_summary`函数调用`add_summary_to_db`函数，将摘要信息添加到数据库中。此操作依赖于当前知识库服务实例的`kb_name`属性和构造的`summary_infos`列表。函数执行成功后，返回`add_summary_to_db`的执行结果，通常是一个表示操作成功的布尔值。
 
 **注意**:
+
 - 确保`summary_combine_docs`参数中的每个文档都包含必要的摘要信息和元数据。
 - 在多线程环境下操作向量库和数据库时，函数内部已采取必要的线程安全措施，请避免在外部重复加锁。
 - 函数执行成功并不直接返回摘要信息，而是通过数据库操作的结果来反映操作是否成功。
@@ -101,7 +117,9 @@ KBSummaryService类是一个抽象基类（ABC），用于定义操作知识库�
 
 在项目中，`add_kb_summary`函数被用于处理知识库文档的摘要信息，支持知识库摘要的创建和更新流程。例如，在知识库摘要API中，通过处理文档文件生成摘要并调用此函数，将摘要信息添加到向量存储和数据库，从而实现知识库的动态更新和管理。
 ***
+
 ### FunctionDef create_kb_summary(self)
+
 **create_kb_summary**: 此函数的功能是创建知识库摘要的存储路径。
 
 **参数**: 此函数没有参数。
@@ -114,7 +132,9 @@ KBSummaryService类是一个抽象基类（ABC），用于定义操作知识库�
 
 **输出示例**: 由于 `create_kb_summary` 函数的主要作用是创建目录，它本身不返回任何值。但是，如果目录创建成功，指定的路径将会存在于文件系统中，这可以通过文件系统的检查工具（如在终端使用 `ls` 命令）来验证。如果之前路径不存在，调用此函数后，你将能够看到新创建的目录。
 ***
+
 ### FunctionDef drop_kb_summary(self)
+
 **drop_kb_summary**: 该函数的功能是删除指定知识库的chunk summary。
 
 **参数**: 此函数不接受任何外部参数。
@@ -124,6 +144,7 @@ KBSummaryService类是一个抽象基类（ABC），用于定义操作知识库�
 在删除过程中，首先确保通过缓存池的原子操作来维护数据一致性，然后从缓存中移除知识库摘要信息，接着删除文件系统中的相关数据，最后从数据库中彻底清除该知识库的摘要信息。这一系列操作确保了知识库摘要的完全删除，避免了数据残留问题。
 
 **注意**:
+
 - 在执行此函数之前，确保 `self.kb_name` 和 `self.vs_path` 已正确设置，分别代表了知识库的名称和向量存储的路径。
 - 由于该操作会从缓存、文件系统和数据库中删除数据，因此操作不可逆，请在调用前确保确实需要删除对应的知识库摘要信息。
 - 该函数不返回任何值，但会影响系统中的缓存、文件系统和数据库状态。

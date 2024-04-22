@@ -1,4 +1,5 @@
 ## ClassDef MinxChatOpenAI
+
 **MinxChatOpenAI**: MinxChatOpenAI类的功能是提供与tiktoken库交互的方法，用于导入tiktoken库和获取编码模型。
 
 **属性**:
@@ -14,16 +15,21 @@ MinxChatOpenAI类包含两个静态方法：`import_tiktoken`和`get_encoding_mo
 在项目中，`MinxChatOpenAI`类的`get_encoding_model`方法被`get_ChatOpenAI`函数调用，以配置和初始化`ChatOpenAI`实例。这表明`MinxChatOpenAI`类提供的功能是为`ChatOpenAI`实例获取正确的编码模型，这对于处理和理解聊天内容至关重要。
 
 **注意**:
+
 - 使用`MinxChatOpenAI`类之前，请确保已经安装了`tiktoken`包，否则将无法成功导入和使用。
 - 在调用`get_encoding_model`方法时，需要注意传入的模型名称是否正确，以及是否准备好处理可能的异常和警告。
 
 **输出示例**:
 调用`get_encoding_model`方法可能返回的示例输出为：
+
 ```python
 ("gpt-3.5-turbo-0301", <tiktoken.Encoding object at 0x123456789>)
 ```
+
 这表示方法返回了模型名称和对应的编码对象。
+
 ### FunctionDef import_tiktoken
+
 **import_tiktoken**: 该函数的功能是导入tiktoken库。
 
 **参数**: 此函数没有参数。
@@ -36,7 +42,9 @@ MinxChatOpenAI类包含两个静态方法：`import_tiktoken`和`get_encoding_mo
 
 **输出示例**: 由于此函数的目的是导入 `tiktoken` 包，因此它不直接返回数据。成功执行后，它将返回 `tiktoken` 模块对象，允许后续代码调用 `tiktoken` 的功能。例如，成功导入后，可以使用 `tiktoken.encoding_for_model(model_name)` 来获取指定模型的编码信息。
 ***
+
 ### FunctionDef get_encoding_model(self)
+
 **get_encoding_model**: 该函数的功能是获取指定模型的编码信息。
 
 **参数**: 此函数没有参数。
